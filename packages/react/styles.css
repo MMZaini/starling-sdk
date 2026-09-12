@@ -1,0 +1,28 @@
+.starling-card {
+  --starling-text: #192830;
+  --starling-muted: #526570;
+  --starling-border: #dce4e7;
+  --starling-surface: #fff;
+  --starling-accent: #006b65;
+  box-sizing: border-box;
+  color: var(--starling-text);
+  background: var(--starling-surface);
+  border: 1px solid var(--starling-border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  min-width: 0;
+}
+.starling-card-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.starling-card-header h2 { margin: 0; font-size: 1.1rem; font-weight: 650; overflow-wrap: anywhere; }
+.starling-currency { color: var(--starling-accent, #006b65); background: #eaf5f3; padding: .3rem .55rem; border-radius: .4rem; font-size: .75rem; font-weight: 650; }
+.starling-balance { color: var(--starling-text, #192830); padding: 1.7rem 0; }
+.starling-label { color: var(--starling-muted, #526570); margin: 0 0 .4rem; font-size: .85rem; }
+.starling-balance-value { margin: 0; font-size: clamp(1.6rem, 5vw, 2rem); font-weight: 600; letter-spacing: -.04em; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.starling-details { margin: 0; color: var(--starling-text, #192830); }
+.starling-detail { display: flex; justify-content: space-between; gap: 1.2rem; padding: .8rem 0; border-top: 1px solid var(--starling-border, #dce4e7); font-size: .875rem; }
+.starling-detail dt { color: var(--starling-muted, #526570); flex-shrink: 0; }
+.starling-detail dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; min-width: 0; }
+.starling-empty, .starling-state { color: var(--starling-muted, #526570); font-size: .875rem; }
+.starling-state { padding: 2rem 0; }
+.starling-card-footer { border-top: 1px solid var(--starling-border); margin-top: .25rem; padding-top: 1.15rem; font-size: .875rem; }

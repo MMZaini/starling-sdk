@@ -10,6 +10,7 @@ npm --prefix sdks/typescript run typecheck
 npm --prefix sdks/typescript test
 npm --prefix sdks/typescript run build
 npm --prefix sdks/typescript run check:scripts
+npm --prefix sdks/typescript run check:public-types
 python -m pytest sdks/python/tests
 ```
 
@@ -17,6 +18,23 @@ The mutual-TLS tests create short-lived certificates and a local HTTPS server.
 TypeScript uses the root `.venv` if present, otherwise `python`; set `TEST_PYTHON`
 to use another interpreter. The Python `dev` extra includes the certificate tooling.
 Unit tests require no bank credentials and make no requests to Starling.
+
+For the optional React package, build the TypeScript SDK first so the component
+tests can verify compatibility with its public types, then run:
+
+```sh
+npm --prefix packages/react ci
+npm --prefix packages/react run typecheck
+npm --prefix packages/react test
+npm --prefix packages/react run build
+cd packages/react
+npx playwright install chromium
+npm run test:browser
+```
+
+Component tests cover SSR, masked details and exact money formatting. Browser
+tests check keyboard controls, accessibility and a narrow mobile layout. The
+components have been checked with React 18.3.1 and 19.3.0.
 
 ## Sandbox checks
 
