@@ -7,11 +7,13 @@ generated from Starling's official OpenAPI specification with [Fern](https://git
 
 | Package | Install | Docs |
 | --- | --- | --- |
-| TypeScript / JavaScript · Node 22+ | `npm install @mmzaini/starling-sdk` | [TypeScript SDK](sdks/typescript/README.md) |
-| Python 3.11+ | `pip install starling-bank-sdk` | [Python SDK](sdks/python/README.md) |
-| Optional React components · React 18/19 | `npm install @mmzaini/starling-react` | [React package](packages/react/README.md) |
+| [TypeScript / JavaScript](https://www.npmjs.com/package/@mmzaini/starling-sdk) · Node 22+ | `npm install @mmzaini/starling-sdk` | [TypeScript SDK](sdks/typescript/README.md) |
+| [Python](https://pypi.org/project/starling-bank-sdk/) 3.11+ | `pip install starling-bank-sdk` | [Python SDK](sdks/python/README.md) |
+| [Optional React components](https://www.npmjs.com/package/@mmzaini/starling-react) · React 18/19 | `npm install @mmzaini/starling-react` | [React package](packages/react/README.md) |
 
 Community maintained and not affiliated with Starling Bank. Both SDKs default to the sandbox.
+
+[Release notes and downloads](https://github.com/MMZaini/starling-sdk/releases).
 
 ## Quick start
 
