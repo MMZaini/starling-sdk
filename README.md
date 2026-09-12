@@ -72,11 +72,32 @@ automatically. See [API details](docs/api-gotchas.md) before using writes or pag
 - [Migrating from the archived SDK](docs/migration.md)
 - [Generation](docs/how-it-works.md), [maintenance](docs/maintaining.md), [testing](docs/testing.md) and [releases](docs/releasing.md)
 
+## Why another SDK
+
+Starling [archived its JavaScript SDK](https://github.com/starlingbank/starling-developer-sdk)
+on 10 September 2026, leaving it read-only and no longer maintained. A few friends
+and I needed a Starling SDK for projects we were working on, so I built this one.
+Both clients are generated from Starling's official OpenAPI spec with Fern, which
+keeps ordinary API updates to a spec update and regeneration. The structure follows
+my friend's [Trading 212 SDK](https://github.com/zaini/trading212-sdk).
+
+## Repository layout
+
+```text
+openapi/          Starling's unmodified spec, source checksum and endpoint metadata
+fern/             Pinned generators and overrides for names, auth and API corrections
+scripts/          Spec updates, generation, package checks and release tooling
+sdks/typescript/  Generated client, TypeScript helpers, package metadata and tests
+sdks/python/      Generated client, Python helpers, package metadata and tests
+packages/react/   Optional account components, styles, examples and browser tests
+tests/            Shared protocol fixtures and the local mutual-TLS test server
+docs/             Authentication, API details, naming map, maintenance and releases
+.github/          CI, spec-update and publishing workflows
+```
+
 ## Development
 
-The upstream spec stays unchanged in `openapi/starling.json`. Fern overrides define
-names and API corrections once for both languages. Custom authentication and
-transport helpers live outside generated code.
+Requires Node 22+, Python 3.11+ and Docker for generation. From the repository root:
 
 ```sh
 npm ci
@@ -84,7 +105,27 @@ npm --prefix sdks/typescript ci
 npm --prefix packages/react ci
 python -m pip install -e 'sdks/python[dev]'
 npm run generate                          # Requires Docker.
+npm --prefix sdks/typescript test
+python -m pytest sdks/python/tests
+npm --prefix packages/react test
 ```
 
 See [testing](docs/testing.md) for unit, browser, package-install and sandbox checks.
-The repository structure follows [zaini/trading212-sdk](https://github.com/zaini/trading212-sdk).
+Sandbox checks are opt-in; ordinary tests need no bank credentials.
+
+## Contributing
+
+Issues and pull requests are welcome, especially:
+
+- Unexpected API behavior, with a small reproduction and redacted request/response details.
+- Spec updates, missing types and corrections to endpoint names.
+- Improvements to authentication helpers, components, documentation and examples.
+
+Keep credentials and account details out of issues and commits. Generated files
+come from the spec and overrides; fixes usually belong there or in the helpers
+outside `generated/`. [CONTRIBUTING.md](CONTRIBUTING.md) explains where changes go
+and which checks to run.
+
+## License
+
+[MIT](LICENSE).
