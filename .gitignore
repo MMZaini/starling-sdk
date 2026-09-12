@@ -3,6 +3,7 @@ test-results/
 playwright-report/
 dist/
 build/
+artifacts/
 .venv/
 __pycache__/
 *.pyc

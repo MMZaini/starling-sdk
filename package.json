@@ -8,7 +8,10 @@
   "scripts": {
     "spec:update": "node scripts/fetch-spec.mjs",
     "spec:check": "node scripts/check-spec.mjs",
-    "generate": "node scripts/generate.mjs"
+    "generate": "node scripts/generate.mjs",
+    "build:artifacts": "node scripts/build-artifacts.mjs",
+    "check:artifacts": "node scripts/check-artifacts.mjs",
+    "publish:npm": "node scripts/publish-npm.mjs"
   },
   "devDependencies": {
     "fern-api": "5.120.1",
