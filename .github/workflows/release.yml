@@ -96,6 +96,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
+          mkdir -p artifacts/release
+          sed -E 's@  (npm|pypi)/@  @' artifacts/SHA256SUMS > artifacts/release/SHA256SUMS
           if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
-            gh release create "$RELEASE_TAG" --verify-tag --title "$RELEASE_TAG" --notes-file CHANGELOG.md artifacts/npm/*.tgz artifacts/pypi/* artifacts/SHA256SUMS
+            gh release create "$RELEASE_TAG" --verify-tag --title "$RELEASE_TAG" --notes-file CHANGELOG.md artifacts/npm/*.tgz artifacts/pypi/* artifacts/release/SHA256SUMS
           fi
