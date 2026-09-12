@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "skipLibCheck": false },
+  "include": ["tests/types/*.mts", "tests/types/*.cts"],
+  "exclude": []
+}

@@ -10,5 +10,6 @@
     "declaration": true,
     "noEmit": true
   },
-  "include": ["src", "tests", "tsup.config.ts"]
+  "include": ["src", "tests", "tsup.config.ts"],
+  "exclude": ["tests/types"]
 }

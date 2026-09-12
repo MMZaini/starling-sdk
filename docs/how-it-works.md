@@ -29,3 +29,8 @@ A Python patch checks status before accepting an empty optional response body. W
 The patches live in `scripts/postprocess.mjs`; generation fails if their expected code changes. Review or remove them when upgrading Fern. Custom SDK helpers live outside the generated directories.
 
 The public client subclasses the generated client without duplicating resource methods. Its transport signs requests after serialization, rejects non-integer amounts and prevents redirects. TypeScript also guards against unsafe integers and uses a deadline across retries and buffered responses. Python retains HTTPX's timeout model and explicitly closes only clients it owns. OAuth and V2 webhook verification are separate helpers because they are absent from the REST specification.
+
+TypeScript bundles runtime code with tsup and emits declarations with tsc. Keeping
+the declaration tree preserves models that share a name with an enum namespace;
+declaration bundling can lose the model's type export. A small build script emits
+the matching CommonJS declarations. Consumer fixtures check both module formats.

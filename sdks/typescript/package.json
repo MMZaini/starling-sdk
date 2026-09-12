@@ -47,9 +47,10 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc -p tsconfig.build.json && node ../../scripts/cjs-types.mjs sdks/typescript",
     "typecheck": "tsc --noEmit",
     "check:scripts": "tsc --noEmit -p tsconfig.scripts.json",
+    "check:public-types": "tsc --noEmit -p tsconfig.public-types.json",
     "test": "node --import tsx --test tests/*.test.ts",
     "prepublishOnly": "npm run typecheck && npm run build"
   },
