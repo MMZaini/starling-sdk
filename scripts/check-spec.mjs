@@ -27,7 +27,7 @@ for (const [path, item] of Object.entries(spec.paths)) {
     const security = operation.security ?? spec.security ?? [];
     const signed = security.some((requirement) => "BearerAndSignature" in requirement);
     const scopes = [...new Set(security.flatMap(Object.values).flat())];
-    operations.push({ method: method.toUpperCase(), path, operationId: operation.operationId, group, name, signed, scopes });
+    operations.push({ method: method.toUpperCase(), path, operationId: operation.operationId, group, name, signed, scopes, security });
   }
 }
 for (const [path, item] of Object.entries(overrides.paths ?? {})) {

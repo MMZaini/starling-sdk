@@ -8,6 +8,13 @@
     "signed": false,
     "scopes": [
       "feed-export-csv:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "feed-export-csv:read"
+        ]
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "signed": false,
     "scopes": [
       "balance:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "balance:read"
+        ]
+      }
     ]
   },
   {
@@ -30,6 +44,13 @@
     "signed": false,
     "scopes": [
       "account-identifier:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "account-identifier:read"
+        ]
+      }
     ]
   },
   {
@@ -42,6 +63,14 @@
     "scopes": [
       "account:read",
       "account-list:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "account:read",
+          "account-list:read"
+        ]
+      }
     ]
   },
   {
@@ -53,6 +82,13 @@
     "signed": false,
     "scopes": [
       "confirmation-of-funds:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "confirmation-of-funds:read"
+        ]
+      }
     ]
   },
   {
@@ -64,6 +100,13 @@
     "signed": false,
     "scopes": [
       "account:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "account:read"
+        ]
+      }
     ]
   },
   {
@@ -75,6 +118,13 @@
     "signed": false,
     "scopes": [
       "address:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "address:read"
+        ]
+      }
     ]
   },
   {
@@ -86,6 +136,13 @@
     "signed": false,
     "scopes": [
       "address:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "address:read"
+        ]
+      }
     ]
   },
   {
@@ -97,6 +154,13 @@
     "signed": false,
     "scopes": [
       "customer:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "customer:read"
+        ]
+      }
     ]
   },
   {
@@ -108,6 +172,13 @@
     "signed": true,
     "scopes": [
       "email:edit"
+    ],
+    "security": [
+      {
+        "BearerAndSignature": [
+          "email:edit"
+        ]
+      }
     ]
   },
   {
@@ -119,6 +190,13 @@
     "signed": false,
     "scopes": [
       "customer:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "customer:read"
+        ]
+      }
     ]
   },
   {
@@ -130,6 +208,13 @@
     "signed": false,
     "scopes": [
       "account:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "account:read"
+        ]
+      }
     ]
   },
   {
@@ -142,6 +227,14 @@
     "scopes": [
       "customer:read",
       "account-holder-type:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "customer:read",
+          "account-holder-type:read"
+        ]
+      }
     ]
   },
   {
@@ -153,6 +246,13 @@
     "signed": false,
     "scopes": [
       "account-holder-name:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "account-holder-name:read"
+        ]
+      }
     ]
   },
   {
@@ -164,6 +264,13 @@
     "signed": false,
     "scopes": [
       "profile-image:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "profile-image:read"
+        ]
+      }
     ]
   },
   {
@@ -175,6 +282,13 @@
     "signed": false,
     "scopes": [
       "profile-image:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "profile-image:edit"
+        ]
+      }
     ]
   },
   {
@@ -186,6 +300,13 @@
     "signed": false,
     "scopes": [
       "profile-image:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "profile-image:edit"
+        ]
+      }
     ]
   },
   {
@@ -197,6 +318,13 @@
     "signed": false,
     "scopes": [
       "address:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "address:read"
+        ]
+      }
     ]
   },
   {
@@ -208,6 +336,13 @@
     "signed": true,
     "scopes": [
       "address:edit"
+    ],
+    "security": [
+      {
+        "BearerAndSignature": [
+          "address:edit"
+        ]
+      }
     ]
   },
   {
@@ -219,6 +354,13 @@
     "signed": false,
     "scopes": [
       "card-control:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "card-control:edit"
+        ]
+      }
     ]
   },
   {
@@ -230,6 +372,13 @@
     "signed": false,
     "scopes": [
       "card-control:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "card-control:edit"
+        ]
+      }
     ]
   },
   {
@@ -241,6 +390,13 @@
     "signed": false,
     "scopes": [
       "card-control:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "card-control:edit"
+        ]
+      }
     ]
   },
   {
@@ -252,6 +408,13 @@
     "signed": false,
     "scopes": [
       "card-control:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "card-control:edit"
+        ]
+      }
     ]
   },
   {
@@ -263,6 +426,13 @@
     "signed": false,
     "scopes": [
       "card-control:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "card-control:edit"
+        ]
+      }
     ]
   },
   {
@@ -274,6 +444,13 @@
     "signed": false,
     "scopes": [
       "card-control:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "card-control:edit"
+        ]
+      }
     ]
   },
   {
@@ -285,6 +462,13 @@
     "signed": false,
     "scopes": [
       "card-control:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "card-control:edit"
+        ]
+      }
     ]
   },
   {
@@ -296,6 +480,13 @@
     "signed": false,
     "scopes": [
       "card-control:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "card-control:edit"
+        ]
+      }
     ]
   },
   {
@@ -307,6 +498,13 @@
     "signed": false,
     "scopes": [
       "card:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "card:read"
+        ]
+      }
     ]
   },
   {
@@ -318,6 +516,13 @@
     "signed": false,
     "scopes": [
       "mandate:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "mandate:read"
+        ]
+      }
     ]
   },
   {
@@ -329,6 +534,13 @@
     "signed": false,
     "scopes": [
       "mandate:delete"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "mandate:delete"
+        ]
+      }
     ]
   },
   {
@@ -340,6 +552,13 @@
     "signed": false,
     "scopes": [
       "mandate:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "mandate:read"
+        ]
+      }
     ]
   },
   {
@@ -351,6 +570,13 @@
     "signed": false,
     "scopes": [
       "mandate:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "mandate:read"
+        ]
+      }
     ]
   },
   {
@@ -362,6 +588,13 @@
     "signed": false,
     "scopes": [
       "mandate:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "mandate:read"
+        ]
+      }
     ]
   },
   {
@@ -373,6 +606,13 @@
     "signed": false,
     "scopes": [
       "attachment:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "attachment:read"
+        ]
+      }
     ]
   },
   {
@@ -384,6 +624,13 @@
     "signed": false,
     "scopes": [
       "attachment:write"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "attachment:write"
+        ]
+      }
     ]
   },
   {
@@ -395,6 +642,13 @@
     "signed": false,
     "scopes": [
       "transaction:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "transaction:edit"
+        ]
+      }
     ]
   },
   {
@@ -406,6 +660,13 @@
     "signed": false,
     "scopes": [
       "receipt:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "receipt:read"
+        ]
+      }
     ]
   },
   {
@@ -419,6 +680,15 @@
       "receipt:write",
       "metadata:create",
       "metadata:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "receipt:write",
+          "metadata:create",
+          "metadata:edit"
+        ]
+      }
     ]
   },
   {
@@ -430,6 +700,13 @@
     "signed": false,
     "scopes": [
       "attachment:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "attachment:read"
+        ]
+      }
     ]
   },
   {
@@ -441,6 +718,13 @@
     "signed": false,
     "scopes": [
       "transaction:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "transaction:read"
+        ]
+      }
     ]
   },
   {
@@ -452,6 +736,13 @@
     "signed": false,
     "scopes": [
       "transaction:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "transaction:read"
+        ]
+      }
     ]
   },
   {
@@ -463,6 +754,13 @@
     "signed": false,
     "scopes": [
       "receipts:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "receipts:read"
+        ]
+      }
     ]
   },
   {
@@ -474,6 +772,13 @@
     "signed": false,
     "scopes": [
       "transaction:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "transaction:read"
+        ]
+      }
     ]
   },
   {
@@ -485,6 +790,13 @@
     "signed": false,
     "scopes": [
       "transaction:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "transaction:read"
+        ]
+      }
     ]
   },
   {
@@ -496,6 +808,13 @@
     "signed": false,
     "scopes": [
       "transaction:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "transaction:read"
+        ]
+      }
     ]
   },
   {
@@ -507,6 +826,13 @@
     "signed": false,
     "scopes": [
       "transaction:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "transaction:read"
+        ]
+      }
     ]
   },
   {
@@ -518,6 +844,13 @@
     "signed": false,
     "scopes": [
       "transaction:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "transaction:edit"
+        ]
+      }
     ]
   },
   {
@@ -529,6 +862,13 @@
     "signed": false,
     "scopes": [
       "savings-goal:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal:read"
+        ]
+      }
     ]
   },
   {
@@ -540,6 +880,13 @@
     "signed": false,
     "scopes": [
       "savings-goal:create"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal:create"
+        ]
+      }
     ]
   },
   {
@@ -551,6 +898,13 @@
     "signed": false,
     "scopes": [
       "savings-goal:delete"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal:delete"
+        ]
+      }
     ]
   },
   {
@@ -562,6 +916,13 @@
     "signed": false,
     "scopes": [
       "authorising-individual:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "authorising-individual:read"
+        ]
+      }
     ]
   },
   {
@@ -573,6 +934,13 @@
     "signed": false,
     "scopes": [
       "none"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "none"
+        ]
+      }
     ]
   },
   {
@@ -584,6 +952,13 @@
     "signed": false,
     "scopes": [
       "none"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "none"
+        ]
+      }
     ]
   },
   {
@@ -596,6 +971,14 @@
     "scopes": [
       "standing-order:read",
       "standing-order-own:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "standing-order:read",
+          "standing-order-own:read"
+        ]
+      }
     ]
   },
   {
@@ -607,6 +990,13 @@
     "signed": true,
     "scopes": [
       "standing-order:create"
+    ],
+    "security": [
+      {
+        "BearerAndSignature": [
+          "standing-order:create"
+        ]
+      }
     ]
   },
   {
@@ -618,6 +1008,13 @@
     "signed": true,
     "scopes": [
       "standing-order:delete"
+    ],
+    "security": [
+      {
+        "BearerAndSignature": [
+          "standing-order:delete"
+        ]
+      }
     ]
   },
   {
@@ -630,6 +1027,14 @@
     "scopes": [
       "standing-order:read",
       "standing-order-own:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "standing-order:read",
+          "standing-order-own:read"
+        ]
+      }
     ]
   },
   {
@@ -641,6 +1046,13 @@
     "signed": true,
     "scopes": [
       "standing-order:create"
+    ],
+    "security": [
+      {
+        "BearerAndSignature": [
+          "standing-order:create"
+        ]
+      }
     ]
   },
   {
@@ -652,6 +1064,13 @@
     "signed": false,
     "scopes": [
       "pay-local:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "pay-local:read"
+        ]
+      }
     ]
   },
   {
@@ -663,6 +1082,13 @@
     "signed": false,
     "scopes": [
       "pay-local:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "pay-local:read"
+        ]
+      }
     ]
   },
   {
@@ -674,6 +1100,13 @@
     "signed": false,
     "scopes": [
       "standing-order:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "standing-order:read"
+        ]
+      }
     ]
   },
   {
@@ -686,6 +1119,14 @@
     "scopes": [
       "pay-local:create",
       "pay-local-once:create"
+    ],
+    "security": [
+      {
+        "BearerAndSignature": [
+          "pay-local:create",
+          "pay-local-once:create"
+        ]
+      }
     ]
   },
   {
@@ -697,6 +1138,13 @@
     "signed": false,
     "scopes": [
       "payee:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "payee:read"
+        ]
+      }
     ]
   },
   {
@@ -708,6 +1156,13 @@
     "signed": false,
     "scopes": [
       "payee:create"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "payee:create"
+        ]
+      }
     ]
   },
   {
@@ -719,6 +1174,13 @@
     "signed": false,
     "scopes": [
       "payee:create"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "payee:create"
+        ]
+      }
     ]
   },
   {
@@ -730,6 +1192,13 @@
     "signed": false,
     "scopes": [
       "payee:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "payee:read"
+        ]
+      }
     ]
   },
   {
@@ -741,6 +1210,13 @@
     "signed": false,
     "scopes": [
       "payee:edit"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "payee:edit"
+        ]
+      }
     ]
   },
   {
@@ -752,6 +1228,13 @@
     "signed": false,
     "scopes": [
       "payee:delete"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "payee:delete"
+        ]
+      }
     ]
   },
   {
@@ -763,6 +1246,13 @@
     "signed": false,
     "scopes": [
       "payee:delete"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "payee:delete"
+        ]
+      }
     ]
   },
   {
@@ -774,6 +1264,13 @@
     "signed": false,
     "scopes": [
       "scheduled-payment:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "scheduled-payment:read"
+        ]
+      }
     ]
   },
   {
@@ -785,6 +1282,13 @@
     "signed": false,
     "scopes": [
       "payee-transaction:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "payee-transaction:read"
+        ]
+      }
     ]
   },
   {
@@ -796,6 +1300,13 @@
     "signed": false,
     "scopes": [
       "payee-image:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "payee-image:read"
+        ]
+      }
     ]
   },
   {
@@ -807,6 +1318,13 @@
     "signed": false,
     "scopes": [
       "savings-goal-transfer:create"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal-transfer:create"
+        ]
+      }
     ]
   },
   {
@@ -818,6 +1336,13 @@
     "signed": false,
     "scopes": [
       "savings-goal-transfer:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal-transfer:read"
+        ]
+      }
     ]
   },
   {
@@ -829,6 +1354,13 @@
     "signed": false,
     "scopes": [
       "savings-goal-transfer:create"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal-transfer:create"
+        ]
+      }
     ]
   },
   {
@@ -840,6 +1372,13 @@
     "signed": false,
     "scopes": [
       "savings-goal-transfer:delete"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal-transfer:delete"
+        ]
+      }
     ]
   },
   {
@@ -851,6 +1390,13 @@
     "signed": false,
     "scopes": [
       "savings-goal:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal:read"
+        ]
+      }
     ]
   },
   {
@@ -862,6 +1408,13 @@
     "signed": false,
     "scopes": [
       "savings-goal:create"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal:create"
+        ]
+      }
     ]
   },
   {
@@ -873,6 +1426,13 @@
     "signed": false,
     "scopes": [
       "savings-goal:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal:read"
+        ]
+      }
     ]
   },
   {
@@ -884,6 +1444,13 @@
     "signed": false,
     "scopes": [
       "savings-goal:create"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal:create"
+        ]
+      }
     ]
   },
   {
@@ -895,6 +1462,13 @@
     "signed": false,
     "scopes": [
       "savings-goal:delete"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal:delete"
+        ]
+      }
     ]
   },
   {
@@ -906,6 +1480,13 @@
     "signed": false,
     "scopes": [
       "savings-goal:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal:read"
+        ]
+      }
     ]
   },
   {
@@ -917,6 +1498,13 @@
     "signed": false,
     "scopes": [
       "savings-goal-transfer:create"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "savings-goal-transfer:create"
+        ]
+      }
     ]
   },
   {
@@ -928,6 +1516,13 @@
     "signed": false,
     "scopes": [
       "settle-up:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "settle-up:read"
+        ]
+      }
     ]
   },
   {
@@ -939,6 +1534,13 @@
     "signed": false,
     "scopes": [
       "space:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "space:read"
+        ]
+      }
     ]
   },
   {
@@ -950,6 +1552,13 @@
     "signed": false,
     "scopes": [
       "space:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "space:read"
+        ]
+      }
     ]
   },
   {
@@ -961,6 +1570,13 @@
     "signed": false,
     "scopes": [
       "space:read"
+    ],
+    "security": [
+      {
+        "Bearer": [
+          "space:read"
+        ]
+      }
     ]
   }
 ]

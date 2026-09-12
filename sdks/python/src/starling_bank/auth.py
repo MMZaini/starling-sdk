@@ -53,10 +53,15 @@ def _parse_tokens(response: httpx.Response) -> OAuthTokens:
             code = "oauth_error"
         raise OAuthError(code, response.status_code)
     expiry = value.get("expires_in")
+    valid_expiry = isinstance(expiry, (int, float)) and not isinstance(expiry, bool)
+    if valid_expiry:
+        try:
+            valid_expiry = math.isfinite(expiry) and expiry > 0
+        except OverflowError:
+            valid_expiry = False
     if (not isinstance(value.get("access_token"), str) or not value["access_token"]
             or not isinstance(value.get("refresh_token"), str) or not value["refresh_token"]
-            or not isinstance(expiry, (int, float)) or isinstance(expiry, bool)
-            or not math.isfinite(expiry) or expiry <= 0
+            or not valid_expiry
             or not isinstance(value.get("token_type"), str) or value["token_type"].lower() != "bearer"
             or not isinstance(value.get("scope", ""), str)):
         raise OAuthError("invalid_response", response.status_code)

@@ -123,7 +123,9 @@ export class StarlingOAuth {
     if (!Object.values(StarlingEnvironment).includes(environment)) throw new TypeError("Invalid OAuth environment");
     const production = environment === StarlingEnvironment.Production;
     const timeout = options.timeoutInSeconds ?? 30;
-    if (!Number.isFinite(timeout) || timeout <= 0) throw new TypeError("timeoutInSeconds must be positive");
+    if (!Number.isFinite(timeout) || timeout <= 0 || timeout * 1000 > 2147483647) {
+      throw new TypeError("timeoutInSeconds must be positive and at most 2147483.647");
+    }
     if (production && !options.tls && !options.transport) {
       throw new TypeError("Production OAuth requires client TLS credentials or a certificate-capable transport");
     }
@@ -164,6 +166,7 @@ export class StarlingOAuth {
     const body = new URLSearchParams({ ...parameters, client_id: this.#options.clientId, client_secret: this.#options.clientSecret }).toString();
     const timeout = AbortSignal.timeout(Math.ceil(this.#options.timeoutInSeconds! * 1000));
     try {
+      signal?.throwIfAborted();
       const response = await this.#transport({
         url: this.#tokenUrl, body,
         headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json", "User-Agent": "starling-sdk-typescript" },

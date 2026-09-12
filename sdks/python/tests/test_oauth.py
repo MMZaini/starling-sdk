@@ -66,7 +66,7 @@ def test_production_requires_certificate_configuration_and_https():
             StarlingOAuth(**OPTIONS, token_url=token_url)
 
 
-@pytest.mark.parametrize("body", [None, [], {**TOKENS, "expires_in": -1}, {**TOKENS, "expires_in": True}, {**TOKENS, "expires_in": 1e30}, {**TOKENS, "refresh_token": ""}, {**TOKENS, "token_type": "MAC"}])
+@pytest.mark.parametrize("body", [None, [], {**TOKENS, "expires_in": -1}, {**TOKENS, "expires_in": True}, {**TOKENS, "expires_in": 1e30}, {**TOKENS, "expires_in": 10**400}, {**TOKENS, "refresh_token": ""}, {**TOKENS, "token_type": "MAC"}])
 def test_invalid_token_response(body):
     with httpx.Client(transport=httpx.MockTransport(lambda request: httpx.Response(200, json=body))) as http:
         with StarlingOAuth(**OPTIONS, httpx_client=http) as oauth:

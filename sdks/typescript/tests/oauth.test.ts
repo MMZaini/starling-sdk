@@ -90,3 +90,17 @@ test("passes cancellation to transports and sanitizes transport errors", async (
   await assert.rejects(oauth.exchangeCode("code", { signal: abort.signal }), (error: unknown) => error instanceof OAuthError && error.code === "request_aborted");
   await assert.rejects(oauth.exchangeCode("code"), (error: unknown) => error instanceof OAuthError && error.code === "network_error" && !String(error).includes("sensitive"));
 });
+
+test("validates timer limits and never invokes a transport for a cancelled exchange", async () => {
+  for (const timeoutInSeconds of [0, -1, Infinity, NaN, 2147483.648]) {
+    assert.throws(() => new StarlingOAuth({ ...options, timeoutInSeconds }), /timeoutInSeconds/);
+  }
+  let attempts = 0;
+  const oauth = new StarlingOAuth({ ...options, transport: async () => {
+    attempts++;
+    return { status: 200, body: tokens };
+  }});
+  await assert.rejects(oauth.exchangeCode("code", { signal: AbortSignal.abort() }),
+    (error: unknown) => error instanceof OAuthError && error.code === "request_aborted");
+  assert.equal(attempts, 0);
+});
