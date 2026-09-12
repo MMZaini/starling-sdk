@@ -1,56 +1,135 @@
-name: Check upstream specification
+name: Update the Starling specification
 
 on:
   schedule:
-    - cron: '0 8 * * 1'
+    - cron: '17 8 * * *'
   workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: starling-spec-update
+  cancel-in-progress: false
+
 jobs:
-  compare:
+  prepare:
+    if: github.repository == 'MMZaini/starling-sdk' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.compare.outputs.changed }}
+      automatic: ${{ steps.patch.outputs.automatic }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24'
-      - run: npm run spec:update
-      - id: changes
-        name: Compare with the committed snapshot
+      - run: |
+          mkdir -p artifacts/spec-update
+          cp openapi/starling.json artifacts/spec-update/before.json
+          npm run spec:update
+      - id: compare
+        name: Classify upstream changes
         run: |
           if git diff --quiet -- openapi/starling.json; then
             echo 'changed=false' >> "$GITHUB_OUTPUT"
             echo 'The upstream specification is unchanged.' >> "$GITHUB_STEP_SUMMARY"
           else
             echo 'changed=true' >> "$GITHUB_OUTPUT"
-            echo 'The upstream specification changed. Review the update artifact and checks before committing it.' >> "$GITHUB_STEP_SUMMARY"
+            node scripts/spec-diff.mjs artifacts/spec-update/before.json openapi/starling.json artifacts/spec-update/comparison.json
           fi
-      - if: steps.changes.outputs.changed == 'true'
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: '3.14'
-      - if: steps.changes.outputs.changed == 'true'
+      - if: steps.compare.outputs.changed == 'true'
+        id: generate
+        continue-on-error: true
         run: |
           npm ci
-          npm --prefix sdks/typescript ci
-          python -m pip install -e 'sdks/python[dev]'
           npm run generate
-          npm --prefix sdks/typescript run typecheck
-          npm --prefix sdks/typescript test
-          npm --prefix sdks/typescript run build
-          npm --prefix sdks/typescript run check:public-types
-          python -m pytest sdks/python/tests
-      - if: always() && steps.changes.outputs.changed == 'true'
-        name: Prepare a reviewable patch
+      - if: always() && steps.compare.outputs.changed == 'true'
+        id: patch
+        name: Prepare the update and release version
+        env:
+          GENERATION_OUTCOME: ${{ steps.generate.outcome }}
         run: |
-          mkdir -p artifacts/spec-update
-          git add --intent-to-add openapi sdks docs/naming-map.md
-          git diff --binary -- openapi sdks docs/naming-map.md > artifacts/spec-update/starling-spec-update.patch
-      - if: always() && steps.changes.outputs.changed == 'true'
+          node --input-type=module <<'JS'
+          import { readFile, writeFile, appendFile } from 'node:fs/promises';
+          import { createHash } from 'node:crypto';
+          import { bumpVersion, specReleaseSummary } from './scripts/bump-version.mjs';
+          const comparison = JSON.parse(await readFile('artifacts/spec-update/comparison.json', 'utf8'));
+          const automatic = comparison.compatible && process.env.GENERATION_OUTCOME === 'success';
+          const version = automatic && comparison.kind !== 'none'
+            ? await bumpVersion(comparison.bump, specReleaseSummary(comparison.kind)) : '';
+          const specSha = createHash('sha256').update(await readFile('openapi/starling.json')).digest('hex');
+          await writeFile('artifacts/spec-update/report.json', JSON.stringify({ ...comparison, automatic, version, specSha, base: process.env.GITHUB_SHA }, null, 2) + '\n');
+          await appendFile(process.env.GITHUB_OUTPUT, `automatic=${automatic}\n`);
+          await appendFile(process.env.GITHUB_STEP_SUMMARY, `Update classification: ${comparison.kind}. ${automatic ? 'Eligible for merge after CI.' : 'Manual review required.'}\n`);
+          JS
+          git add --intent-to-add openapi sdks docs/naming-map.md packages/react/package.json packages/react/package-lock.json CHANGELOG.md
+          git diff --binary -- openapi sdks docs/naming-map.md packages/react/package.json packages/react/package-lock.json CHANGELOG.md > artifacts/spec-update/update.patch
+      - if: always() && steps.compare.outputs.changed == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: starling-spec-update
-          path: artifacts/spec-update/
+          path: |
+            artifacts/spec-update/report.json
+            artifacts/spec-update/update.patch
           if-no-files-found: error
+
+  propose:
+    needs: prepare
+    if: needs.prepare.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      head: ${{ steps.pr.outputs.head }}
+      pull_request: ${{ steps.pr.outputs.pull_request }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: starling-spec-update
+          path: artifacts/spec-update
+      - id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/spec-update-git.mjs propose
+
+  checks:
+    needs: [prepare, propose]
+    if: needs.propose.outputs.head != ''
+    uses: ./.github/workflows/ci.yml
+    with:
+      ref: ${{ needs.propose.outputs.head }}
+
+  merge:
+    needs: [prepare, propose, checks]
+    if: needs.prepare.outputs.automatic == 'true' && needs.propose.outputs.head != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: starling-spec-update
+          path: artifacts/spec-update
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          UPDATE_HEAD: ${{ needs.propose.outputs.head }}
+          UPDATE_PR: ${{ needs.propose.outputs.pull_request }}
+        run: node scripts/spec-update-git.mjs merge

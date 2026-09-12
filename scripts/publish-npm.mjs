@@ -3,9 +3,11 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve, sep } from "node:path";
+import { checkPublishSource } from "./check-publish-source.mjs";
 
 assert(process.env.npm_execpath, "Run npm run publish:npm");
 const manifest = JSON.parse(await readFile("artifacts/manifest.json", "utf8"));
+checkPublishSource(manifest);
 for (const file of manifest.files.filter((entry) => entry.registry === "npm")) {
   const artifact = resolve("artifacts", file.path);
   assert(artifact.startsWith(resolve("artifacts/npm") + sep));

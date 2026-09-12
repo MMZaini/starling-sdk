@@ -81,6 +81,10 @@ Both clients are generated from Starling's official OpenAPI spec with Fern, whic
 keeps ordinary API updates to a spec update and regeneration. The structure follows
 my friend's [Trading 212 SDK](https://github.com/zaini/trading212-sdk).
 
+A daily workflow regenerates, tests, merges and publishes compatible spec updates.
+Changes that cannot be classified safely open a PR for review. See
+[automatic updates](docs/maintaining.md#automatic-updates) for the exact policy.
+
 ## Repository layout
 
 ```text
@@ -90,7 +94,7 @@ scripts/          Spec updates, generation, package checks and release tooling
 sdks/typescript/  Generated client, TypeScript helpers, package metadata and tests
 sdks/python/      Generated client, Python helpers, package metadata and tests
 packages/react/   Optional account components, styles, examples and browser tests
-tests/            Shared protocol fixtures and the local mutual-TLS test server
+tests/            Shared fixtures, automation checks and the local mutual-TLS server
 docs/             Authentication, API details, naming map, maintenance and releases
 .github/          CI, spec-update and publishing workflows
 ```

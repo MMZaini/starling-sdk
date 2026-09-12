@@ -4,6 +4,11 @@ The packages share a version: `@mmzaini/starling-sdk`, `@mmzaini/starling-react`
 `starling-bank-sdk`. Update their manifests and the changelog together. Keep the
 npm lockfiles current when changing versions or dependencies.
 
+For a manual release, `node scripts/bump-version.mjs patch "Describe the change."`
+updates all package versions, lockfiles and the changelog. Use `minor` for additive
+features. Edit the release notes before committing. Compatible spec updates use
+this same versioning helper through the [automatic updater](maintaining.md#automatic-updates).
+
 ## Registry setup
 
 For PyPI, add a [pending GitHub publisher](https://pypi.org/manage/account/publishing/)
@@ -57,8 +62,14 @@ release after both registries succeed. A manual dispatch must select a version t
 
 The workflow can resume a partial publication: an existing npm version must have
 matching integrity, and existing PyPI files must have matching SHA-256 checksums.
+GitHub releases stay in draft until every archive and checksum is uploaded. A
+retry verifies existing assets and uploads missing ones; it refuses to replace
+different bytes. Release notes include only the version being published.
 Never move a released tag or reuse a version for different contents. Fix a published
 problem with a new version; do not overwrite release history.
+
+Publishing scripts also reject archives from a different commit, a mismatched
+version or a checkout with uncommitted files.
 
 All publishing jobs use registry-specific GitHub environments and short-lived OIDC
 credentials. PR tests receive no banking or publishing credentials.

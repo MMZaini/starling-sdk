@@ -4,6 +4,7 @@ From the repository root:
 
 ```sh
 npm ci
+npm test
 npm --prefix sdks/typescript ci
 python -m pip install -e 'sdks/python[dev]'
 npm --prefix sdks/typescript run typecheck
@@ -18,6 +19,11 @@ The mutual-TLS tests create short-lived certificates and a local HTTPS server.
 TypeScript uses the root `.venv` if present, otherwise `python`; set `TEST_PYTHON`
 to use another interpreter. The Python `dev` extra includes the certificate tooling.
 Unit tests require no bank credentials and make no requests to Starling.
+
+Root tests cover spec compatibility, versioning and release-note selection. Git
+automation tests use temporary repositories and a fake GitHub CLI: they exercise
+owner-authored merges and reject stale commits and changes outside generated
+output. They run on Linux in CI; use WSL to run them on Windows.
 
 For the optional React package, build the TypeScript SDK first so the component
 tests can verify compatibility with its public types, then run:

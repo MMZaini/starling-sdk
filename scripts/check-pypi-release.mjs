@@ -2,8 +2,10 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { basename, resolve, sep } from "node:path";
+import { checkPublishSource } from "./check-publish-source.mjs";
 
 const manifest = JSON.parse(await readFile("artifacts/manifest.json", "utf8"));
+checkPublishSource(manifest);
 const response = await fetch(`https://pypi.org/pypi/starling-bank-sdk/${manifest.version}/json`);
 assert(response.ok || response.status === 404, "Could not check PyPI");
 const published = response.ok ? await response.json() : undefined;

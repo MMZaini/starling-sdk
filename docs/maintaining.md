@@ -17,12 +17,45 @@ Do not edit generated files directly. Keep language helpers outside `generated/`
 put naming and schema corrections in `fern/overrides.yml`. `spec:check` regenerates
 the endpoint map and signing routes and detects missing or obsolete mappings.
 
-The weekly `Check upstream specification` workflow performs the same comparison
-and, when changed, regenerates and tests the SDKs. It uploads a patch for review
-and never publishes packages. Download the `starling-spec-update` artifact, create
-a local branch, and apply `git apply --index starling-spec-update.patch`. Check the
-workflow's test results and review the diff before committing. If generation fails,
-the patch still contains the updated spec so missing mappings can be resolved.
+## Automatic updates
+
+`Update the Starling specification` checks the official spec daily at 08:17 UTC
+and can also run manually from Actions. It classifies changes, regenerates both
+clients and opens a pull request. Compatible updates pass the full CI matrix
+against the proposed commit before being merged and released automatically.
+
+| Upstream change | Action |
+| --- | --- |
+| Formatting only | Test and merge; no new package version |
+| Recognized documentation changes | Test, merge and publish a patch version |
+| New schemas or optional response model fields | Test, merge and publish a minor version |
+| Request schemas, endpoints, scopes, signing, required fields, enums or existing types | Open a draft PR for review |
+| Unknown changes or failed generation | Open a draft PR for review |
+
+Compatibility is deliberately conservative. Field-name collisions and schemas
+also used in requests require review. Generator versions and dependencies remain
+pinned; their upgrades are separate changes. Tests cannot establish every
+application's compatibility, so inspect release notes when updating a consumer.
+
+Automatic commits and merge commits use `MMZaini <mahdizainipro@gmail.com>`.
+GitHub Actions appears as the workflow actor. The updater never force-pushes a
+branch, and additional commits on an update branch require manual review. If
+`main` changes during CI, the merge stops and the next run prepares a new candidate.
+
+Generation and tests run with read-only repository access. Separate jobs can
+create PRs and merge only allowed generated files and version changes. Publishing
+uses the existing trusted-publisher environments. The updater explicitly dispatches
+the release workflow because pushes made with `GITHUB_TOKEN` do not trigger it.
+
+For a draft update, use its branch or download the `starling-spec-update` artifact
+and apply `git apply --index update.patch` on a branch from the recorded base.
+The artifact includes the compatibility report and any generated changes. Review
+the failed checks, resolve mappings or helpers, and prepare a versioned release.
+Repeated runs leave an existing draft for the same upstream snapshot alone.
+
+The repository allows Actions to create pull requests; the default token remains
+read-only. Disable this workflow in Actions to pause automatic updates. Forks need
+their own repository identity, workflow permission and publisher configuration.
 
 New endpoints need readable names in the overrides. Removed endpoints need their
 overrides removed. Changes to authentication or behavior absent from the OpenAPI
