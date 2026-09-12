@@ -51,13 +51,17 @@ else if (args[0] === "pr" && args[1] === "create") {
 } else if (args[0] === "pr" && args[1] === "view") console.log(JSON.stringify(state.pr));
 else if (args[0] === "workflow" && args[1] === "run") { state.dispatch = args; writeFileSync(path, JSON.stringify(state)); }
 else if (args[0] === "api" && args.at(-1).includes("/releases?")) {
+  state.listRequests = (state.listRequests ?? 0) + 1; writeFileSync(path, JSON.stringify(state));
   console.log(JSON.stringify([state.release ? [state.release] : []]));
-} else if (args[0] === "release" && args[1] === "create") {
-  state.release = { tag_name: args[2], draft: true, assets: [] }; writeFileSync(path, JSON.stringify(state));
-} else if (args[0] === "release" && args[1] === "upload") {
-  state.release.assets.push({ name: basename(args[3]), digest: "sha256:" + createHash("sha256").update(readFileSync(args[3])).digest("hex") });
+} else if (args[0] === "api" && args.includes("POST") && args.some((value) => value.endsWith("/releases"))) {
+  const payload = JSON.parse(readFileSync(args[args.indexOf("--input") + 1], "utf8"));
+  state.release = { id: 1, tag_name: payload.tag_name, draft: true, assets: [] }; writeFileSync(path, JSON.stringify(state));
+  console.log(JSON.stringify(state.release));
+} else if (args[0] === "api" && args.some((value) => value.startsWith("https://uploads.github.com/"))) {
+  const file = args[args.indexOf("--input") + 1];
+  state.release.assets.push({ name: basename(file), digest: "sha256:" + createHash("sha256").update(readFileSync(file)).digest("hex") });
   state.uploads = (state.uploads ?? 0) + 1; writeFileSync(path, JSON.stringify(state));
-} else if (args[0] === "release" && args[1] === "edit") {
+} else if (args[0] === "api" && args.includes("PATCH")) {
   state.release.draft = false; writeFileSync(path, JSON.stringify(state));
 }
 else { console.error("Unexpected GitHub command", args); process.exit(1); }
@@ -156,6 +160,8 @@ test("publication rejects stale archives and uncommitted source", options, async
 test("release uploads resume missing files and refuse different existing bytes", options, async (t) => {
   const f = await fixture(t);
   f.env.RELEASE_TAG = "v0.1.0";
+  f.git("tag", "v0.1.0");
+  f.git("push", "origin", "v0.1.0");
   const archive = "Fixture archive bytes";
   await f.put("artifacts/npm/fixture.tgz", archive);
   await f.put("artifacts/manifest.json", JSON.stringify({ commit: f.base, version: "0.1.0", files: [{ path: "npm/fixture.tgz", sha256: createHash("sha256").update(archive).digest("hex") }] }));
@@ -163,6 +169,7 @@ test("release uploads resume missing files and refuse different existing bytes",
   let state = JSON.parse(await readFile(f.env.STARLING_TEST_STATE, "utf8"));
   assert.equal(state.release.draft, false);
   assert.equal(state.uploads, 2);
+  assert.equal(state.listRequests, 1, "Creation must not depend on the release index updating immediately");
   state.release.assets = state.release.assets.filter((asset) => asset.name !== "SHA256SUMS");
   state.release.draft = true;
   await writeFile(f.env.STARLING_TEST_STATE, JSON.stringify(state));

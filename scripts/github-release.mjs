@@ -28,10 +28,15 @@ const endpoint = `repos/${process.env.GITHUB_REPOSITORY}/releases?per_page=100`;
 const findRelease = () => JSON.parse(gh("api", "--paginate", "--slurp", endpoint)).flat().find((entry) => entry.tag_name === tag);
 let release = findRelease();
 if (!release) {
-  gh("release", "create", tag, "--verify-tag", "--title", tag, "--notes-file", "artifacts/release/notes.md", "--draft");
-  release = findRelease();
+  execFileSync("git", ["ls-remote", "--exit-code", "origin", `refs/tags/${tag}`], { stdio: "pipe" });
+  await writeFile("artifacts/release/payload.json", JSON.stringify({
+    tag_name: tag, target_commitish: manifest.commit, name: tag,
+    body: await readFile("artifacts/release/notes.md", "utf8"), draft: true,
+  }));
+  // Use the creation response: a new draft can take time to appear in the release index.
+  release = JSON.parse(gh("api", "--method", "POST", `repos/${process.env.GITHUB_REPOSITORY}/releases`, "--input", "artifacts/release/payload.json"));
 }
-assert(release, "Could not find the created draft release");
+assert(Number.isSafeInteger(release.id), "Expected a GitHub release ID");
 assert.equal(release.tag_name, tag);
 for (const file of files) {
   const asset = release.assets.find((entry) => entry.name === file.name);
@@ -42,7 +47,8 @@ for (const file of files) {
       digest = "sha256:" + createHash("sha256").update(bytes).digest("hex");
     }
     assert.equal(digest, `sha256:${file.sha256}`, `Existing release asset differs: ${file.name}`);
-  } else gh("release", "upload", tag, file.path);
+  } else gh("api", "--method", "POST", `https://uploads.github.com/repos/${process.env.GITHUB_REPOSITORY}/releases/${release.id}/assets?name=${encodeURIComponent(file.name)}`,
+    "--header", "Content-Type: application/octet-stream", "--input", file.path);
 }
-if (release.draft) gh("release", "edit", tag, "--draft=false");
+if (release.draft) gh("api", "--method", "PATCH", `repos/${process.env.GITHUB_REPOSITORY}/releases/${release.id}`, "--field", "draft=false");
 console.log(`GitHub release ${tag} has all verified archives and checksums.`);
