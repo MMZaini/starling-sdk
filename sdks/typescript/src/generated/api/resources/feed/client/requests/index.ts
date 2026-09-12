@@ -1,0 +1,13 @@
+export type { DownloadAttachmentFeedRequest } from "./DownloadAttachmentFeedRequest.js";
+export type { GetFeedRequest } from "./GetFeedRequest.js";
+export type { GetMastercardDetailsFeedRequest } from "./GetMastercardDetailsFeedRequest.js";
+export type { GetReceiptFeedRequest } from "./GetReceiptFeedRequest.js";
+export type { ListAttachmentsFeedRequest } from "./ListAttachmentsFeedRequest.js";
+export type { ListBetweenFeedRequest } from "./ListBetweenFeedRequest.js";
+export type { ListChangesFeedRequest } from "./ListChangesFeedRequest.js";
+export type { ListPageFeedRequest } from "./ListPageFeedRequest.js";
+export type { ListReceiptsFeedRequest } from "./ListReceiptsFeedRequest.js";
+export type { ListSettledBetweenFeedRequest } from "./ListSettledBetweenFeedRequest.js";
+export type { PutReceiptFeedRequest } from "./PutReceiptFeedRequest.js";
+export { UpdateSpendingCategory } from "./UpdateSpendingCategory.js";
+export type { UserNoteWrapper } from "./UserNoteWrapper.js";

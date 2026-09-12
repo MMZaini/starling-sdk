@@ -1,0 +1,11 @@
+export type { CreateSavingsGoalsRequest } from "./CreateSavingsGoalsRequest.js";
+export type { DeleteRecurringTransferSavingsGoalsRequest } from "./DeleteRecurringTransferSavingsGoalsRequest.js";
+export type { DeleteSavingsGoalsRequest } from "./DeleteSavingsGoalsRequest.js";
+export type { DownloadPhotoSavingsGoalsRequest } from "./DownloadPhotoSavingsGoalsRequest.js";
+export type { GetRecurringTransferSavingsGoalsRequest } from "./GetRecurringTransferSavingsGoalsRequest.js";
+export type { GetSavingsGoalsRequest } from "./GetSavingsGoalsRequest.js";
+export type { ListSavingsGoalsRequest } from "./ListSavingsGoalsRequest.js";
+export type { ScheduledSavingsPaymentRequestV2 } from "./ScheduledSavingsPaymentRequestV2.js";
+export type { TopUpRequestV2 } from "./TopUpRequestV2.js";
+export type { UpdateSavingsGoalsRequest } from "./UpdateSavingsGoalsRequest.js";
+export type { WithdrawalRequestV2 } from "./WithdrawalRequestV2.js";

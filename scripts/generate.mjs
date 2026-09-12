@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { readdir, readFile, rm } from "node:fs/promises";
 import { resolve } from "node:path";
+import { postprocess } from "./postprocess.mjs";
 
 const groups = process.argv.slice(2);
 if (!groups.length) groups.push("typescript", "python");
@@ -28,4 +29,12 @@ for (const group of groups) {
   const files = await readdir(path);
   if (!files.length) throw new Error(`Fern produced no source in ${path}`);
   await rm(`${path}/.fern-metadata.json`, { force: true });
+  for (const name of ["README.md", "CONTRIBUTING.md", "reference.md", "tests", ".fern"]) {
+    const target = resolve(path, name);
+    if (!target.startsWith(resolve(path) + (process.platform === "win32" ? "\\" : "/"))) {
+      throw new Error("Generation cleanup escaped the output directory");
+    }
+    await rm(target, { recursive: true, force: true });
+  }
+  await postprocess(group);
 }

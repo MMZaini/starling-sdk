@@ -24,6 +24,7 @@ groups:
           outputSourceFiles: true
           allowCustomFetcher: true
           inlinePathParameters: true
+          flattenRequestParameters: true
   python:
     generators:
       - name: fernapi/fern-python-sdk
@@ -34,3 +35,5 @@ groups:
         config:
           client_class_name: StarlingClient
           package_name: starling_bank.generated
+          inline_path_params: true
+          encode_path_params: true
