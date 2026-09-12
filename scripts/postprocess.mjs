@@ -35,4 +35,51 @@ export async function postprocess(group) {
     }
     await writeFile(requestPath, importLine + "\n\n" + requestSource);
   }
+  const parserPath = "sdks/typescript/src/generated/core/fetcher/getResponseBody.ts";
+  let parser = await readFile(parserPath, "utf8");
+  const invalidJson = "export class InvalidJsonResponseError";
+  if (!parser.includes(invalidJson)) {
+    const before = `        } catch (_err) {
+            return {
+                ok: false,
+                error: {
+                    reason: "non-json",
+                    statusCode: response.status,
+                    rawBody: text,
+                },
+            };
+        }`;
+    if (parser.split(before).length !== 2) throw new Error("Review the invalid JSON response patch after upgrading Fern");
+    parser = parser.replace(before, `        } catch (_err) {
+            throw new InvalidJsonResponseError(response, text);
+        }`);
+    parser += `\nexport class InvalidJsonResponseError extends Error {
+    constructor(public readonly response: Response, public readonly rawBody: string) {
+        super("Starling returned invalid JSON");
+    }
+}\n`;
+    await writeFile(parserPath, parser);
+  }
+  const fetcherPath = "sdks/typescript/src/generated/core/fetcher/Fetcher.ts";
+  let fetcher = await readFile(fetcherPath, "utf8");
+  if (!fetcher.includes("error instanceof InvalidJsonResponseError")) {
+    const status = "response.status >= 200 && response.status < 400";
+    const caught = "    } catch (error) {\n        if (args.abortSignal?.aborted) {";
+    const imported = 'import { getResponseBody } from "./getResponseBody.js";';
+    for (const marker of [status, caught, imported]) {
+      if (fetcher.split(marker).length !== 2) throw new Error("Review the response status/parser patch after upgrading Fern");
+    }
+    fetcher = fetcher.replace(status, "response.status >= 200 && response.status < 300")
+      .replace(imported, 'import { getResponseBody, InvalidJsonResponseError } from "./getResponseBody.js";')
+      .replace(caught, `    } catch (error) {
+        if (error instanceof InvalidJsonResponseError) {
+            return {
+                ok: false,
+                error: { reason: "non-json", statusCode: error.response.status, rawBody: error.rawBody },
+                rawResponse: toRawResponse(error.response),
+            };
+        }
+        if (args.abortSignal?.aborted) {`);
+    await writeFile(fetcherPath, fetcher);
+  }
 }

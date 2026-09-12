@@ -56,15 +56,14 @@ export async function getResponseBody(response: Response, responseType?: string)
             const responseBody = fromJson(text);
             return responseBody;
         } catch (_err) {
-            return {
-                ok: false,
-                error: {
-                    reason: "non-json",
-                    statusCode: response.status,
-                    rawBody: text,
-                },
-            };
+            throw new InvalidJsonResponseError(response, text);
         }
     }
     return undefined;
+}
+
+export class InvalidJsonResponseError extends Error {
+    constructor(public readonly response: Response, public readonly rawBody: string) {
+        super("Starling returned invalid JSON");
+    }
 }

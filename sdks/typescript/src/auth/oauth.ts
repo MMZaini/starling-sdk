@@ -60,7 +60,7 @@ export function validateOAuthState(expected: string, received: string | undefine
 
 function httpsTransport(tls?: OAuthTlsOptions): OAuthTransport {
   return ({ url, body, headers, signal }) => new Promise((resolve, reject) => {
-    const request = httpsRequest(url, { ...tls, method: "POST", headers, signal }, (response) => {
+    const request = httpsRequest(url, { ...tls, rejectUnauthorized: true, method: "POST", headers, signal }, (response) => {
       const chunks: Buffer[] = [];
       let size = 0;
       response.on("data", (chunk: Buffer) => {

@@ -12,13 +12,17 @@ npm run spec:check
 npm run generate
 ```
 
-Generation requires Docker and writes only the generated source directories. On Windows, the same command can run inside WSL with Linux Node and Docker installed. Our pinned generators produce source locally without a Fern account; npm/PyPI packaging is maintained separately.
+Generation requires Docker and writes the generated source, endpoint map and signing metadata. On Windows, the same command can run inside WSL with Linux Node and Docker installed. Our pinned generators produce source locally without a Fern account; npm/PyPI packaging is maintained separately.
 
 The endpoint map and scope/signing manifest come from `npm run spec:check`. The check fails for unmapped new operations, stale overrides, duplicate method names and write operations with retries enabled.
 
-Two checked TypeScript patches currently cover generator defects:
+Checked TypeScript patches currently cover generator defects:
 
 - Clear the fetch timeout when the request rejects, as well as when it succeeds.
 - Add a missing namespace import for a flattened payee-account enum.
+- Raise an API error for invalid JSON instead of returning an error object as successful data.
+- Treat 3xx responses as errors so redirects cannot appear to be successful API responses.
 
 The patches live in `scripts/postprocess.mjs`; generation fails if their expected code changes. Review or remove them when upgrading Fern. Custom SDK helpers live outside the generated directories.
+
+The public client subclasses the generated client without duplicating resource methods. Its transport signs requests after serialization, rejects non-integer amounts and prevents redirects. TypeScript also guards against unsafe integers and uses a deadline across retries and buffered responses. Python retains HTTPX's timeout model and explicitly closes only clients it owns. OAuth and V2 webhook verification are separate helpers because they are absent from the REST specification.

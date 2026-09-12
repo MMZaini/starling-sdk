@@ -7,7 +7,7 @@ import { EndpointSupplier } from "./EndpointSupplier.js";
 import { getErrorResponseBody } from "./getErrorResponseBody.js";
 import { getFetchFn } from "./getFetchFn.js";
 import { getRequestBody } from "./getRequestBody.js";
-import { getResponseBody } from "./getResponseBody.js";
+import { getResponseBody, InvalidJsonResponseError } from "./getResponseBody.js";
 import { Headers } from "./Headers.js";
 import { makeRequest } from "./makeRequest.js";
 import { abortRawResponse, toRawResponse, unknownRawResponse } from "./RawResponse.js";
@@ -196,7 +196,7 @@ export async function fetcherImpl<R = unknown>(args: Fetcher.Args): Promise<APIR
             args.maxRetries,
         );
 
-        if (response.status >= 200 && response.status < 400) {
+        if (response.status >= 200 && response.status < 300) {
             if (logger.isDebug()) {
                 const metadata = {
                     method: args.method,
@@ -234,6 +234,13 @@ export async function fetcherImpl<R = unknown>(args: Fetcher.Args): Promise<APIR
             };
         }
     } catch (error) {
+        if (error instanceof InvalidJsonResponseError) {
+            return {
+                ok: false,
+                error: { reason: "non-json", statusCode: error.response.status, rawBody: error.rawBody },
+                rawResponse: toRawResponse(error.response),
+            };
+        }
         if (args.abortSignal?.aborted) {
             if (logger.isError()) {
                 const metadata = {
