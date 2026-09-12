@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.1
+
+- Tighten OAuth cancellation, timer limits and token-expiry validation.
+- Preserve scope alternatives in endpoint metadata.
+- Automatically test, merge and publish compatible Starling spec updates.
+- Verify publication source and resume incomplete GitHub release uploads.
+- Add project background, repository layout and contribution guidance.
+
 ## 0.1.0
 
 - TypeScript and Python clients for all 87 Starling Public API operations.

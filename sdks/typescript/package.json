@@ -1,6 +1,6 @@
 {
   "name": "@mmzaini/starling-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Typed TypeScript client for the Starling Bank Public API",
   "license": "MIT",
   "author": "MMZaini",

@@ -16,6 +16,7 @@ jobs:
   prepare:
     if: github.repository == 'MMZaini/starling-sdk' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     outputs:
       changed: ${{ steps.compare.outputs.changed }}
       automatic: ${{ steps.patch.outputs.automatic }}
@@ -80,6 +81,7 @@ jobs:
     needs: prepare
     if: needs.prepare.outputs.changed == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
       contents: write
       pull-requests: write
@@ -113,6 +115,7 @@ jobs:
     needs: [prepare, propose, checks]
     if: needs.prepare.outputs.automatic == 'true' && needs.propose.outputs.head != ''
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
       contents: write
       pull-requests: write

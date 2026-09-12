@@ -1,6 +1,6 @@
 {
   "name": "@mmzaini/starling-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React components for displaying Starling account details and balances",
   "license": "MIT",
   "author": "MMZaini",
@@ -11,22 +11,44 @@
   },
   "homepage": "https://github.com/MMZaini/starling-sdk/tree/main/packages/react",
   "bugs": "https://github.com/MMZaini/starling-sdk/issues",
-  "keywords": ["starling", "starling-bank", "react", "components"],
+  "keywords": [
+    "starling",
+    "starling-bank",
+    "react",
+    "components"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
-      "require": { "types": "./dist/index.d.cts", "default": "./dist/index.cjs" }
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./styles.css": "./styles.css"
   },
-  "files": ["dist", "styles.css", "README.md", "LICENSE"],
-  "sideEffects": ["*.css"],
-  "publishConfig": { "access": "public" },
-  "peerDependencies": { "react": "^18.3.1 || ^19.0.0" },
+  "files": [
+    "dist",
+    "styles.css",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1 || ^19.0.0"
+  },
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",
@@ -49,5 +71,7 @@
     "typescript": "5.9.3",
     "vite": "8.3.0"
   },
-  "overrides": { "esbuild": "^0.28.2" }
+  "overrides": {
+    "esbuild": "^0.28.2"
+  }
 }

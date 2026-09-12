@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { execFileSync, spawnSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, resolve, sep } from "node:path";
@@ -23,22 +23,23 @@ const sums = files.map((file) => `${file.sha256}  ${file.name}`).join("\n") + "\
 await writeFile("artifacts/release/SHA256SUMS", sums);
 files.push({ path: "artifacts/release/SHA256SUMS", name: "SHA256SUMS", sha256: createHash("sha256").update(sums).digest("hex") });
 await writeFile("artifacts/release/notes.md", releaseNotes(await readFile("CHANGELOG.md", "utf8"), manifest.version));
-const endpoint = `repos/${process.env.GITHUB_REPOSITORY}/releases/tags/${tag}`;
-const existing = spawnSync("gh", ["api", endpoint], { encoding: "utf8" });
-if (existing.status !== 0) {
-  assert(existing.stderr.includes("HTTP 404"), "Could not check the existing GitHub release");
+// Listing with write access includes drafts; the tag endpoint documents published releases only.
+const endpoint = `repos/${process.env.GITHUB_REPOSITORY}/releases?per_page=100`;
+const findRelease = () => JSON.parse(gh("api", "--paginate", "--slurp", endpoint)).flat().find((entry) => entry.tag_name === tag);
+let release = findRelease();
+if (!release) {
   gh("release", "create", tag, "--verify-tag", "--title", tag, "--notes-file", "artifacts/release/notes.md", "--draft");
+  release = findRelease();
 }
-const release = JSON.parse(gh("api", endpoint));
+assert(release, "Could not find the created draft release");
 assert.equal(release.tag_name, tag);
 for (const file of files) {
   const asset = release.assets.find((entry) => entry.name === file.name);
   if (asset) {
     let digest = asset.digest;
     if (!digest) {
-      const response = await fetch(asset.browser_download_url, { signal: AbortSignal.timeout(30_000) });
-      assert(response.ok, "Could not verify an existing release asset");
-      digest = "sha256:" + createHash("sha256").update(Buffer.from(await response.arrayBuffer())).digest("hex");
+      const bytes = execFileSync("gh", ["api", "--header", "Accept: application/octet-stream", `repos/${process.env.GITHUB_REPOSITORY}/releases/assets/${asset.id}`], { maxBuffer: 20 * 1024 * 1024, stdio: ["ignore", "pipe", "inherit"] });
+      digest = "sha256:" + createHash("sha256").update(bytes).digest("hex");
     }
     assert.equal(digest, `sha256:${file.sha256}`, `Existing release asset differs: ${file.name}`);
   } else gh("release", "upload", tag, file.path);

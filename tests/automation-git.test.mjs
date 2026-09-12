@@ -50,9 +50,8 @@ else if (args[0] === "pr" && args[1] === "create") {
   console.log(state.pr.url);
 } else if (args[0] === "pr" && args[1] === "view") console.log(JSON.stringify(state.pr));
 else if (args[0] === "workflow" && args[1] === "run") { state.dispatch = args; writeFileSync(path, JSON.stringify(state)); }
-else if (args[0] === "api" && args[1].includes("/releases/tags/")) {
-  if (!state.release) { console.error("gh: Not Found (HTTP 404)"); process.exit(1); }
-  console.log(JSON.stringify(state.release));
+else if (args[0] === "api" && args.at(-1).includes("/releases?")) {
+  console.log(JSON.stringify([state.release ? [state.release] : []]));
 } else if (args[0] === "release" && args[1] === "create") {
   state.release = { tag_name: args[2], draft: true, assets: [] }; writeFileSync(path, JSON.stringify(state));
 } else if (args[0] === "release" && args[1] === "upload") {
