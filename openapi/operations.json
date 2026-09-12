@@ -1,0 +1,966 @@
+[
+  {
+    "method": "GET",
+    "path": "/api/v2/accounts/{accountUid}/feed-export",
+    "operationId": "downloadCSVFeedExportForDateRange",
+    "group": "accounts",
+    "name": "exportFeed",
+    "signed": false,
+    "scopes": [
+      "feed-export-csv:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/accounts/{accountUid}/balance",
+    "operationId": "getAccountBalance",
+    "group": "accounts",
+    "name": "getBalance",
+    "signed": false,
+    "scopes": [
+      "balance:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/accounts/{accountUid}/identifiers",
+    "operationId": "getAccountIdentifiers",
+    "group": "accounts",
+    "name": "getIdentifiers",
+    "signed": false,
+    "scopes": [
+      "account-identifier:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/accounts",
+    "operationId": "getAccounts",
+    "group": "accounts",
+    "name": "list",
+    "signed": false,
+    "scopes": [
+      "account:read",
+      "account-list:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/accounts/{accountUid}/confirmation-of-funds",
+    "operationId": "getConfirmationOfFunds",
+    "group": "accounts",
+    "name": "confirmFunds",
+    "signed": false,
+    "scopes": [
+      "confirmation-of-funds:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account-holder/business",
+    "operationId": "getBusiness",
+    "group": "business",
+    "name": "get",
+    "signed": false,
+    "scopes": [
+      "account:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account-holder/business/correspondence-address",
+    "operationId": "getCorrespondenceAddress",
+    "group": "business",
+    "name": "getCorrespondenceAddress",
+    "signed": false,
+    "scopes": [
+      "address:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account-holder/business/registered-address",
+    "operationId": "getRegisteredAddress",
+    "group": "business",
+    "name": "getRegisteredAddress",
+    "signed": false,
+    "scopes": [
+      "address:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account-holder/individual",
+    "operationId": "getIndividual",
+    "group": "individual",
+    "name": "get",
+    "signed": false,
+    "scopes": [
+      "customer:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/account-holder/individual/email",
+    "operationId": "updateEmail",
+    "group": "individual",
+    "name": "updateEmail",
+    "signed": true,
+    "scopes": [
+      "email:edit"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account-holder/joint",
+    "operationId": "getJointAccount",
+    "group": "jointAccount",
+    "name": "get",
+    "signed": false,
+    "scopes": [
+      "customer:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account-holder/sole-trader",
+    "operationId": "getSoleTrader",
+    "group": "soleTrader",
+    "name": "get",
+    "signed": false,
+    "scopes": [
+      "account:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account-holder",
+    "operationId": "getAccountHolder",
+    "group": "accountHolder",
+    "name": "get",
+    "signed": false,
+    "scopes": [
+      "customer:read",
+      "account-holder-type:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account-holder/name",
+    "operationId": "getAccountHolderName",
+    "group": "accountHolder",
+    "name": "getName",
+    "signed": false,
+    "scopes": [
+      "account-holder-name:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account-holder/{accountHolderUid}/profile-image",
+    "operationId": "downloadProfileImage",
+    "group": "profileImage",
+    "name": "download",
+    "signed": false,
+    "scopes": [
+      "profile-image:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/account-holder/{accountHolderUid}/profile-image",
+    "operationId": "updateProfileImage",
+    "group": "profileImage",
+    "name": "update",
+    "signed": false,
+    "scopes": [
+      "profile-image:edit"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/v2/account-holder/{accountHolderUid}/profile-image",
+    "operationId": "deleteProfileImage",
+    "group": "profileImage",
+    "name": "delete",
+    "signed": false,
+    "scopes": [
+      "profile-image:edit"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/addresses",
+    "operationId": "getAddresses",
+    "group": "addresses",
+    "name": "list",
+    "signed": false,
+    "scopes": [
+      "address:read"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/v2/addresses",
+    "operationId": "updateCurrentAddress",
+    "group": "addresses",
+    "name": "update",
+    "signed": true,
+    "scopes": [
+      "address:edit"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/cards/{cardUid}/controls/atm-enabled",
+    "operationId": "enableAtm",
+    "group": "cards",
+    "name": "setAtmEnabled",
+    "signed": false,
+    "scopes": [
+      "card-control:edit"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/cards/{cardUid}/controls/enabled",
+    "operationId": "enableCard",
+    "group": "cards",
+    "name": "setEnabled",
+    "signed": false,
+    "scopes": [
+      "card-control:edit"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/cards/{cardUid}/controls/currency-switch",
+    "operationId": "enableCurrencySwitch",
+    "group": "cards",
+    "name": "setCurrencySwitchEnabled",
+    "signed": false,
+    "scopes": [
+      "card-control:edit"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/cards/{cardUid}/controls/gambling-enabled",
+    "operationId": "enableGamblingPayments",
+    "group": "cards",
+    "name": "setGamblingEnabled",
+    "signed": false,
+    "scopes": [
+      "card-control:edit"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/cards/{cardUid}/controls/mag-stripe-enabled",
+    "operationId": "enableMagStripePayment",
+    "group": "cards",
+    "name": "setMagStripeEnabled",
+    "signed": false,
+    "scopes": [
+      "card-control:edit"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/cards/{cardUid}/controls/mobile-wallet-enabled",
+    "operationId": "enableMobileWallet",
+    "group": "cards",
+    "name": "setMobileWalletEnabled",
+    "signed": false,
+    "scopes": [
+      "card-control:edit"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/cards/{cardUid}/controls/online-enabled",
+    "operationId": "enableOnlinePayments",
+    "group": "cards",
+    "name": "setOnlineEnabled",
+    "signed": false,
+    "scopes": [
+      "card-control:edit"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/cards/{cardUid}/controls/pos-enabled",
+    "operationId": "enablePos",
+    "group": "cards",
+    "name": "setPosEnabled",
+    "signed": false,
+    "scopes": [
+      "card-control:edit"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/cards",
+    "operationId": "listCards",
+    "group": "cards",
+    "name": "list",
+    "signed": false,
+    "scopes": [
+      "card:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/direct-debit/mandates/{mandateUid}",
+    "operationId": "getMandate",
+    "group": "directDebits",
+    "name": "get",
+    "signed": false,
+    "scopes": [
+      "mandate:read"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/v2/direct-debit/mandates/{mandateUid}",
+    "operationId": "cancelMandate",
+    "group": "directDebits",
+    "name": "cancel",
+    "signed": false,
+    "scopes": [
+      "mandate:delete"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/direct-debit/mandates",
+    "operationId": "listMandates",
+    "group": "directDebits",
+    "name": "list",
+    "signed": false,
+    "scopes": [
+      "mandate:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/direct-debit/mandates/account/{accountUid}",
+    "operationId": "listMandatesForAccount",
+    "group": "directDebits",
+    "name": "listForAccount",
+    "signed": false,
+    "scopes": [
+      "mandate:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/direct-debit/mandates/{mandateUid}/payments",
+    "operationId": "listPaymentsForMandate",
+    "group": "directDebits",
+    "name": "listPayments",
+    "signed": false,
+    "scopes": [
+      "mandate:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/attachments",
+    "operationId": "getFeedItemAttachments",
+    "group": "feed",
+    "name": "listAttachments",
+    "signed": false,
+    "scopes": [
+      "attachment:read"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/attachments",
+    "operationId": "attachToFeedItem",
+    "group": "feed",
+    "name": "uploadAttachment",
+    "signed": false,
+    "scopes": [
+      "attachment:write"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/spending-category",
+    "operationId": "changeTransactionCategory",
+    "group": "feed",
+    "name": "setSpendingCategory",
+    "signed": false,
+    "scopes": [
+      "transaction:edit"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/receipt",
+    "operationId": "getReceipt",
+    "group": "feed",
+    "name": "getReceipt",
+    "signed": false,
+    "scopes": [
+      "receipt:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/receipt",
+    "operationId": "createOrUpdateReceipt",
+    "group": "feed",
+    "name": "putReceipt",
+    "signed": false,
+    "scopes": [
+      "receipt:write",
+      "metadata:create",
+      "metadata:edit"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/attachments/{feedItemAttachmentUid}",
+    "operationId": "downloadFeedItemAttachment",
+    "group": "feed",
+    "name": "downloadAttachment",
+    "signed": false,
+    "scopes": [
+      "attachment:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}",
+    "operationId": "getFeedItem",
+    "group": "feed",
+    "name": "get",
+    "signed": false,
+    "scopes": [
+      "transaction:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/mastercard",
+    "operationId": "getMastercardFeedItem",
+    "group": "feed",
+    "name": "getMastercardDetails",
+    "signed": false,
+    "scopes": [
+      "transaction:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/receipts",
+    "operationId": "getReceipts",
+    "group": "feed",
+    "name": "listReceipts",
+    "signed": false,
+    "scopes": [
+      "receipts:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/feed/account/{accountUid}/category/{categoryUid}",
+    "operationId": "queryFeedItems",
+    "group": "feed",
+    "name": "listChanges",
+    "signed": false,
+    "scopes": [
+      "transaction:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/feed/account/{accountUid}/category/{categoryUid}/transactions-between",
+    "operationId": "queryFeedItemsByCategoryWithTransactionTimesBetween",
+    "group": "feed",
+    "name": "listBetween",
+    "signed": false,
+    "scopes": [
+      "transaction:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/feed/account/{accountUid}/settled-transactions-between",
+    "operationId": "queryFeedItemsWithTransactionTimesBetween",
+    "group": "feed",
+    "name": "listSettledBetween",
+    "signed": false,
+    "scopes": [
+      "transaction:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/feed/account/{accountUid}/category/{categoryUid}/paginated-transactions",
+    "operationId": "queryPaginatedFeedItemsByCategoryWithTransactionTimesBetween",
+    "group": "feed",
+    "name": "listPage",
+    "signed": false,
+    "scopes": [
+      "transaction:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/user-note",
+    "operationId": "updateUserNote",
+    "group": "feed",
+    "name": "setNote",
+    "signed": false,
+    "scopes": [
+      "transaction:edit"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/feed/account/{accountUid}/round-up",
+    "operationId": "fetchRoundUpGoal",
+    "group": "roundUp",
+    "name": "get",
+    "signed": false,
+    "scopes": [
+      "savings-goal:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/feed/account/{accountUid}/round-up",
+    "operationId": "activateRoundUpGoal",
+    "group": "roundUp",
+    "name": "set",
+    "signed": false,
+    "scopes": [
+      "savings-goal:create"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/v2/feed/account/{accountUid}/round-up",
+    "operationId": "stopRoundUpGoal",
+    "group": "roundUp",
+    "name": "delete",
+    "signed": false,
+    "scopes": [
+      "savings-goal:delete"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/identity/individual",
+    "operationId": "getAuthorisingIndividual",
+    "group": "identity",
+    "name": "getIndividual",
+    "signed": false,
+    "scopes": [
+      "authorising-individual:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/identity/token",
+    "operationId": "getTokenIdentity",
+    "group": "identity",
+    "name": "getToken",
+    "signed": false,
+    "scopes": [
+      "none"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/identity/logout",
+    "operationId": "logoutIndividual",
+    "group": "identity",
+    "name": "logout",
+    "signed": false,
+    "scopes": [
+      "none"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/payments/local/account/{accountUid}/category/{categoryUid}/standing-orders/{paymentOrderUid}",
+    "operationId": "getStandingOrder",
+    "group": "payments",
+    "name": "getStandingOrder",
+    "signed": false,
+    "scopes": [
+      "standing-order:read",
+      "standing-order-own:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/payments/local/account/{accountUid}/category/{categoryUid}/standing-orders/{paymentOrderUid}",
+    "operationId": "updateStandingOrder",
+    "group": "payments",
+    "name": "updateStandingOrder",
+    "signed": true,
+    "scopes": [
+      "standing-order:create"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/v2/payments/local/account/{accountUid}/category/{categoryUid}/standing-orders/{paymentOrderUid}",
+    "operationId": "cancelStandingOrder",
+    "group": "payments",
+    "name": "cancelStandingOrder",
+    "signed": true,
+    "scopes": [
+      "standing-order:delete"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/payments/local/account/{accountUid}/category/{categoryUid}/standing-orders",
+    "operationId": "listStandingOrders",
+    "group": "payments",
+    "name": "listStandingOrders",
+    "signed": false,
+    "scopes": [
+      "standing-order:read",
+      "standing-order-own:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/payments/local/account/{accountUid}/category/{categoryUid}/standing-orders",
+    "operationId": "createStandingOrder",
+    "group": "payments",
+    "name": "createStandingOrder",
+    "signed": true,
+    "scopes": [
+      "standing-order:create"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/payments/local/payment-order/{paymentOrderUid}",
+    "operationId": "getPaymentOrder",
+    "group": "payments",
+    "name": "getOrder",
+    "signed": false,
+    "scopes": [
+      "pay-local:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/payments/local/payment-order/{paymentOrderUid}/payments",
+    "operationId": "getPaymentOrderPayments",
+    "group": "payments",
+    "name": "listOrderPayments",
+    "signed": false,
+    "scopes": [
+      "pay-local:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/payments/local/account/{accountUid}/category/{categoryUid}/standing-orders/{paymentOrderUid}/upcoming-payments",
+    "operationId": "listNextPaymentDates",
+    "group": "payments",
+    "name": "listUpcomingDates",
+    "signed": false,
+    "scopes": [
+      "standing-order:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/payments/local/account/{accountUid}/category/{categoryUid}",
+    "operationId": "makeLocalPayment",
+    "group": "payments",
+    "name": "create",
+    "signed": true,
+    "scopes": [
+      "pay-local:create",
+      "pay-local-once:create"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/payees",
+    "operationId": "getPayees",
+    "group": "payees",
+    "name": "list",
+    "signed": false,
+    "scopes": [
+      "payee:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/payees",
+    "operationId": "createPayee",
+    "group": "payees",
+    "name": "create",
+    "signed": false,
+    "scopes": [
+      "payee:create"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/payees/{payeeUid}/account",
+    "operationId": "createPayeeAccount",
+    "group": "payees",
+    "name": "addAccount",
+    "signed": false,
+    "scopes": [
+      "payee:create"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/payees/{payeeUid}",
+    "operationId": "getPayee",
+    "group": "payees",
+    "name": "get",
+    "signed": false,
+    "scopes": [
+      "payee:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/payees/{payeeUid}",
+    "operationId": "updatePayee",
+    "group": "payees",
+    "name": "update",
+    "signed": false,
+    "scopes": [
+      "payee:edit"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/v2/payees/{payeeUid}",
+    "operationId": "deletePayee",
+    "group": "payees",
+    "name": "delete",
+    "signed": false,
+    "scopes": [
+      "payee:delete"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/v2/payees/{payeeUid}/account/{accountUid}",
+    "operationId": "deletePayeeAccount",
+    "group": "payees",
+    "name": "deleteAccount",
+    "signed": false,
+    "scopes": [
+      "payee:delete"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/payees/{payeeUid}/account/{accountUid}/scheduled-payments",
+    "operationId": "listPaymentOrdersForAccount",
+    "group": "payees",
+    "name": "listScheduledPayments",
+    "signed": false,
+    "scopes": [
+      "scheduled-payment:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/payees/{payeeUid}/account/{accountUid}/payments",
+    "operationId": "listPaymentsForPayeeAccount",
+    "group": "payees",
+    "name": "listPayments",
+    "signed": false,
+    "scopes": [
+      "payee-transaction:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/payees/{payeeUid}/image",
+    "operationId": "servePayeeImageFile",
+    "group": "payees",
+    "name": "downloadImage",
+    "signed": false,
+    "scopes": [
+      "payee-image:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}/add-money/{transferUid}",
+    "operationId": "addMoney",
+    "group": "savingsGoals",
+    "name": "addMoney",
+    "signed": false,
+    "scopes": [
+      "savings-goal-transfer:create"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}/recurring-transfer",
+    "operationId": "getRecurringTransfer",
+    "group": "savingsGoals",
+    "name": "getRecurringTransfer",
+    "signed": false,
+    "scopes": [
+      "savings-goal-transfer:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}/recurring-transfer",
+    "operationId": "createOrUpdateRecurringTransfer",
+    "group": "savingsGoals",
+    "name": "setRecurringTransfer",
+    "signed": false,
+    "scopes": [
+      "savings-goal-transfer:create"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}/recurring-transfer",
+    "operationId": "deleteRecurringTransfer",
+    "group": "savingsGoals",
+    "name": "deleteRecurringTransfer",
+    "signed": false,
+    "scopes": [
+      "savings-goal-transfer:delete"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account/{accountUid}/savings-goals",
+    "operationId": "getSavingsGoals",
+    "group": "savingsGoals",
+    "name": "list",
+    "signed": false,
+    "scopes": [
+      "savings-goal:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/account/{accountUid}/savings-goals",
+    "operationId": "createSavingsGoal",
+    "group": "savingsGoals",
+    "name": "create",
+    "signed": false,
+    "scopes": [
+      "savings-goal:create"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}",
+    "operationId": "getSavingsGoal",
+    "group": "savingsGoals",
+    "name": "get",
+    "signed": false,
+    "scopes": [
+      "savings-goal:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}",
+    "operationId": "updateSavingsGoal",
+    "group": "savingsGoals",
+    "name": "update",
+    "signed": false,
+    "scopes": [
+      "savings-goal:create"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}",
+    "operationId": "deleteSavingsGoal",
+    "group": "savingsGoals",
+    "name": "delete",
+    "signed": false,
+    "scopes": [
+      "savings-goal:delete"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}/photo",
+    "operationId": "getSavingsGoalPhoto",
+    "group": "savingsGoals",
+    "name": "downloadPhoto",
+    "signed": false,
+    "scopes": [
+      "savings-goal:read"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}/withdraw-money/{transferUid}",
+    "operationId": "withdrawMoney",
+    "group": "savingsGoals",
+    "name": "withdrawMoney",
+    "signed": false,
+    "scopes": [
+      "savings-goal-transfer:create"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/settle-up/profile",
+    "operationId": "getSettleUpProfile",
+    "group": "settleUp",
+    "name": "get",
+    "signed": false,
+    "scopes": [
+      "settle-up:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account/{accountUid}/spaces/{spaceUid}/photo",
+    "operationId": "getSpacePhoto",
+    "group": "spaces",
+    "name": "downloadPhoto",
+    "signed": false,
+    "scopes": [
+      "space:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account/{accountUid}/spaces",
+    "operationId": "getSpaces",
+    "group": "spaces",
+    "name": "list",
+    "signed": false,
+    "scopes": [
+      "space:read"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/v2/account/{accountUid}/spaces/spending/{spaceUid}",
+    "operationId": "getSpendingSpace",
+    "group": "spaces",
+    "name": "getSpendingSpace",
+    "signed": false,
+    "scopes": [
+      "space:read"
+    ]
+  }
+]

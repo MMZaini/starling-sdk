@@ -1,0 +1,495 @@
+# SDK naming and behavior, layered over the untouched upstream specification.
+servers:
+  - url: https://api-sandbox.starlingbank.com
+    x-fern-server-name: Sandbox
+  - url: https://api.starlingbank.com
+    x-fern-server-name: Production
+paths:
+  "/api/v2/accounts/{accountUid}/feed-export":
+    get:
+      x-fern-sdk-group-name: accounts
+      x-fern-sdk-method-name: exportFeed
+      description: "A Feed Export contains a list of all (Settled) transactions on an account for a specified date range in CSV format.\n\nRequired scopes (any): feed-export-csv:read."
+  "/api/v2/accounts/{accountUid}/balance":
+    get:
+      x-fern-sdk-group-name: accounts
+      x-fern-sdk-method-name: getBalance
+      description: "The account balance is expressed in two ways: cleared balance and effective balance.\n* The **cleared balance** is the balance of settled transactions and so does not include pending transactions. The cleared end of day balance is used to calculate interest.\n* The **effective balance** is the balance of settled and pending outgoing transactions. This is the balance most commonly presented to the account holder (e.g. in-app).\n\n`clearedBalance` and `effectiveBalance` hold the values for the main account only, excluding balances in spaces, savings goals etc. `totalClearedBalance` and `totalEffectiveBalance` hold the corresponding values totalled across the main account and all spaces, savings goals etc.\n\nMany payment types settle almost instantly (e.g. faster payments). Card transactions usually take a few days to settle and will remain pending for this time. We've got a blog post on [how card transactions work](https://www.starlingbank.com/blog/card-transactions-explained/).\n\nTo check whether the account has enough money to make a payment, use the confirmation of funds endpoint instead.\n\nRequired scopes (any): balance:read."
+  "/api/v2/accounts/{accountUid}/identifiers":
+    get:
+      x-fern-sdk-group-name: accounts
+      x-fern-sdk-method-name: getIdentifiers
+      description: "Identifiers come in pairs:\n\n* A bank identifier, which identifies the bank\n* An account identifier, which identifiers the account at the bank\n\nIdentifiers can be:\n* Sort code and account number for domestic UK payments\n* BIC and IBAN for international payments\n* ABA and ACH routing numbers for domestic US payments\n\nRequired scopes (any): account-identifier:read."
+  "/api/v2/accounts":
+    get:
+      x-fern-sdk-group-name: accounts
+      x-fern-sdk-method-name: list
+      description: "This endpoint returns a list of the accounts that you can access using the access token you supplied in the request header.\n\nEach access token is associated with a single account holder, who may have more than one account (for example, a GBP account and a euro account). This endpoint returns all the accounts that the account holder has given you permission to access.\n\nNote that an account holder in this context is either a personal account holder, or a sole trader account holder, or a business account holder or a joint account holder. An individual person may be more than one of these kinds of account holder, but each kind of account holder is a separate entity and hence requires a separate access token and permission.\n\nCategories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nRequired scopes (any): account:read, account-list:read."
+  "/api/v2/accounts/{accountUid}/confirmation-of-funds":
+    get:
+      x-fern-sdk-group-name: accounts
+      x-fern-sdk-method-name: confirmFunds
+      description: "\n\nRequired scopes (any): confirmation-of-funds:read."
+  "/api/v2/account-holder/business":
+    get:
+      x-fern-sdk-group-name: business
+      x-fern-sdk-method-name: get
+      description: "\n\nRequired scopes (any): account:read."
+  "/api/v2/account-holder/business/correspondence-address":
+    get:
+      x-fern-sdk-group-name: business
+      x-fern-sdk-method-name: getCorrespondenceAddress
+      description: "Will fallback to registered address if not available\n\nRequired scopes (any): address:read."
+  "/api/v2/account-holder/business/registered-address":
+    get:
+      x-fern-sdk-group-name: business
+      x-fern-sdk-method-name: getRegisteredAddress
+      description: "\n\nRequired scopes (any): address:read."
+  "/api/v2/account-holder/individual":
+    get:
+      x-fern-sdk-group-name: individual
+      x-fern-sdk-method-name: get
+      description: "\n\nRequired scopes (any): customer:read."
+  "/api/v2/account-holder/individual/email":
+    put:
+      x-fern-sdk-group-name: individual
+      x-fern-sdk-method-name: updateEmail
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): email:edit. Requires request signing."
+  "/api/v2/account-holder/joint":
+    get:
+      x-fern-sdk-group-name: jointAccount
+      x-fern-sdk-method-name: get
+      description: "\n\nRequired scopes (any): customer:read."
+  "/api/v2/account-holder/sole-trader":
+    get:
+      x-fern-sdk-group-name: soleTrader
+      x-fern-sdk-method-name: get
+      description: "\n\nRequired scopes (any): account:read."
+  "/api/v2/account-holder":
+    get:
+      x-fern-sdk-group-name: accountHolder
+      x-fern-sdk-method-name: get
+      description: "\n\nRequired scopes (any): customer:read, account-holder-type:read."
+  "/api/v2/account-holder/name":
+    get:
+      x-fern-sdk-group-name: accountHolder
+      x-fern-sdk-method-name: getName
+      description: "\n\nRequired scopes (any): account-holder-name:read."
+  "/api/v2/account-holder/{accountHolderUid}/profile-image":
+    get:
+      x-fern-sdk-group-name: profileImage
+      x-fern-sdk-method-name: download
+      description: "\n\nRequired scopes (any): profile-image:read."
+    put:
+      x-fern-sdk-group-name: profileImage
+      x-fern-sdk-method-name: update
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): profile-image:edit."
+    delete:
+      x-fern-sdk-group-name: profileImage
+      x-fern-sdk-method-name: delete
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): profile-image:edit."
+  "/api/v2/addresses":
+    get:
+      x-fern-sdk-group-name: addresses
+      x-fern-sdk-method-name: list
+      description: "\n\nRequired scopes (any): address:read."
+    post:
+      x-fern-sdk-group-name: addresses
+      x-fern-sdk-method-name: update
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): address:edit. Requires request signing."
+  "/api/v2/cards/{cardUid}/controls/atm-enabled":
+    put:
+      x-fern-sdk-group-name: cards
+      x-fern-sdk-method-name: setAtmEnabled
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): card-control:edit."
+  "/api/v2/cards/{cardUid}/controls/enabled":
+    put:
+      x-fern-sdk-group-name: cards
+      x-fern-sdk-method-name: setEnabled
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): card-control:edit."
+  "/api/v2/cards/{cardUid}/controls/currency-switch":
+    put:
+      x-fern-sdk-group-name: cards
+      x-fern-sdk-method-name: setCurrencySwitchEnabled
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): card-control:edit."
+  "/api/v2/cards/{cardUid}/controls/gambling-enabled":
+    put:
+      x-fern-sdk-group-name: cards
+      x-fern-sdk-method-name: setGamblingEnabled
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): card-control:edit."
+  "/api/v2/cards/{cardUid}/controls/mag-stripe-enabled":
+    put:
+      x-fern-sdk-group-name: cards
+      x-fern-sdk-method-name: setMagStripeEnabled
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): card-control:edit."
+  "/api/v2/cards/{cardUid}/controls/mobile-wallet-enabled":
+    put:
+      x-fern-sdk-group-name: cards
+      x-fern-sdk-method-name: setMobileWalletEnabled
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): card-control:edit."
+  "/api/v2/cards/{cardUid}/controls/online-enabled":
+    put:
+      x-fern-sdk-group-name: cards
+      x-fern-sdk-method-name: setOnlineEnabled
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): card-control:edit."
+  "/api/v2/cards/{cardUid}/controls/pos-enabled":
+    put:
+      x-fern-sdk-group-name: cards
+      x-fern-sdk-method-name: setPosEnabled
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): card-control:edit."
+  "/api/v2/cards":
+    get:
+      x-fern-sdk-group-name: cards
+      x-fern-sdk-method-name: list
+      description: "\n\nRequired scopes (any): card:read."
+  "/api/v2/direct-debit/mandates/{mandateUid}":
+    get:
+      x-fern-sdk-group-name: directDebits
+      x-fern-sdk-method-name: get
+      description: "\n\nRequired scopes (any): mandate:read."
+    delete:
+      x-fern-sdk-group-name: directDebits
+      x-fern-sdk-method-name: cancel
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): mandate:delete."
+  "/api/v2/direct-debit/mandates":
+    get:
+      x-fern-sdk-group-name: directDebits
+      x-fern-sdk-method-name: list
+      description: "\n\nRequired scopes (any): mandate:read."
+  "/api/v2/direct-debit/mandates/account/{accountUid}":
+    get:
+      x-fern-sdk-group-name: directDebits
+      x-fern-sdk-method-name: listForAccount
+      description: "\n\nRequired scopes (any): mandate:read."
+  "/api/v2/direct-debit/mandates/{mandateUid}/payments":
+    get:
+      x-fern-sdk-group-name: directDebits
+      x-fern-sdk-method-name: listPayments
+      description: "\n\nRequired scopes (any): mandate:read."
+  "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/attachments":
+    get:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: listAttachments
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nRequired scopes (any): attachment:read."
+    post:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: uploadAttachment
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): attachment:write."
+  "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/spending-category":
+    put:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: setSpendingCategory
+      x-fern-retries:
+        disabled: true
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nThe spending category is different. It specifies the type of spending associated with the transaction, for example, `GROCERIES`, `GIFTS` or `VAT`.\n\nRequired scopes (any): transaction:edit."
+  "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/receipt":
+    get:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: getReceipt
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nRequired scopes (any): receipt:read."
+    put:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: putReceipt
+      x-fern-retries:
+        disabled: true
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nRequired scopes (any): receipt:write, metadata:create, metadata:edit."
+  "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/attachments/{feedItemAttachmentUid}":
+    get:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: downloadAttachment
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nRequired scopes (any): attachment:read."
+  "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}":
+    get:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: get
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nRequired scopes (any): transaction:read."
+  "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/mastercard":
+    get:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: getMastercardDetails
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nRequired scopes (any): transaction:read."
+  "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/receipts":
+    get:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: listReceipts
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nRequired scopes (any): receipts:read."
+  "/api/v2/feed/account/{accountUid}/category/{categoryUid}":
+    get:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: listChanges
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nThe `changesSince` date must be within 1 year of the current date-time. Requests with a `changesSince` value older than 1 year will return HTTP 400. For queries spanning more than 1 year, use the paginated-transactions endpoint instead.\n\nRequired scopes (any): transaction:read."
+  "/api/v2/feed/account/{accountUid}/category/{categoryUid}/transactions-between":
+    get:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: listBetween
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nThe date range between `minTransactionTimestamp` and `maxTransactionTimestamp` must not exceed 1 year. Requests exceeding this limit will return HTTP 400. For queries spanning more than 1 year, use the paginated-transactions endpoint instead.\n\nRequired scopes (any): transaction:read."
+  "/api/v2/feed/account/{accountUid}/settled-transactions-between":
+    get:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: listSettledBetween
+      description: "The date range between `minTransactionTimestamp` and `maxTransactionTimestamp` must not exceed 1 year. Requests exceeding this limit will return HTTP 400. For queries spanning more than 1 year, use the paginated-transactions endpoint instead.\n\nRequired scopes (any): transaction:read."
+  "/api/v2/feed/account/{accountUid}/category/{categoryUid}/paginated-transactions":
+    get:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: listPage
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nThis endpoint supports date ranges greater than 1 year and is the recommended alternative when querying more than 1 year of transaction history. The non-paginated feed endpoints (transactions-between, settled-transactions-between, and changesSince) are limited to a 1-year date range and will return HTTP 400 if exceeded.\n\nReturns transactions in descending order (most recent first), sorted by the time they were added to the feed. Page size is fixed at 1000 transactions. Follow pagination links in the links object to navigate pages. All transaction statuses are returned; filter on the client side if you only need settled transactions.\n\nRequired scopes (any): transaction:read."
+  "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/user-note":
+    put:
+      x-fern-sdk-group-name: feed
+      x-fern-sdk-method-name: setNote
+      x-fern-retries:
+        disabled: true
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nRequired scopes (any): transaction:edit."
+  "/api/v2/feed/account/{accountUid}/round-up":
+    get:
+      x-fern-sdk-group-name: roundUp
+      x-fern-sdk-method-name: get
+      description: "\n\nRequired scopes (any): savings-goal:read."
+    put:
+      x-fern-sdk-group-name: roundUp
+      x-fern-sdk-method-name: set
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): savings-goal:create."
+    delete:
+      x-fern-sdk-group-name: roundUp
+      x-fern-sdk-method-name: delete
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): savings-goal:delete."
+  "/api/v2/identity/individual":
+    get:
+      x-fern-sdk-group-name: identity
+      x-fern-sdk-method-name: getIndividual
+      description: "\n\nRequired scopes (any): authorising-individual:read."
+  "/api/v2/identity/token":
+    get:
+      x-fern-sdk-group-name: identity
+      x-fern-sdk-method-name: getToken
+      description: "This endpoint returns the permissions you have access to, the time until the token expires and the account holder's unique identifier.\n\nRequired scopes (any): none."
+  "/api/v2/identity/logout":
+    put:
+      x-fern-sdk-group-name: identity
+      x-fern-sdk-method-name: logout
+      x-fern-retries:
+        disabled: true
+      description: "This endpoint logs an individual out by disabling all of their active access tokens.\n\nRequired scopes (any): none."
+  "/api/v2/payments/local/account/{accountUid}/category/{categoryUid}/standing-orders/{paymentOrderUid}":
+    get:
+      x-fern-sdk-group-name: payments
+      x-fern-sdk-method-name: getStandingOrder
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nIf `startDate` is null, the standing order is awaiting review and has not yet been approved.\n\nIf `cancelledAt` is non-null, the standing order has been cancelled, either by the customer, or as a result of the payment review.\n\nRequired scopes (any): standing-order:read, standing-order-own:read."
+    put:
+      x-fern-sdk-group-name: payments
+      x-fern-sdk-method-name: updateStandingOrder
+      x-fern-retries:
+        disabled: true
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nPossible 400 (Bad Request) errors include:\n * `CANNOT_MAKE_REQUESTED_CHANGE`: you cannot make this change to this standing order. You can create a new standing order instead. \n* `CANNOT_UPDATE_CANCELLED_PAYMENT_ORDER`: you cannot update this standing order because it has been cancelled.\n* `CANNOT_UPDATE_PENDING_PAYMENT_ORDER`: you cannot update this standing order at this time because it is pending. This can happen if the original standing order is awaiting review. In this case, `GET /api/v2/payments/local/account/{accountUid}/category/{categoryUid}/standing-orders/{paymentOrderUid}` will return a null `startDate`.\n\nRequired scopes (any): standing-order:create. Requires request signing."
+    delete:
+      x-fern-sdk-group-name: payments
+      x-fern-sdk-method-name: cancelStandingOrder
+      x-fern-retries:
+        disabled: true
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nPossible 400 (Bad Request) errors include:\n * `CANNOT_CANCEL_PENDING_PAYMENT_ORDER`: you cannot cancel this standing order at this time because it is pending. This can happen if the original standing order is awaiting review. In this case, `GET /api/v2/payments/local/account/{accountUid}/category/{categoryUid}/standing-orders/{paymentOrderUid}` returns a null `startDate`.\n\nRequired scopes (any): standing-order:delete. Requires request signing."
+  "/api/v2/payments/local/account/{accountUid}/category/{categoryUid}/standing-orders":
+    get:
+      x-fern-sdk-group-name: payments
+      x-fern-sdk-method-name: listStandingOrders
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nStanding orders that are awaiting review are omitted from the list.\n\nRequired scopes (any): standing-order:read, standing-order-own:read."
+    put:
+      x-fern-sdk-group-name: payments
+      x-fern-sdk-method-name: createStandingOrder
+      x-fern-retries:
+        disabled: true
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nThe recipient of the standing order must either be defined in the `paymentRecipient` field in the request body  or be an existing payee of the account holder (you can create a new payee using `/api/v2/payees`).\n\n`externalIdentifier` is a unique identifier for the standing order request, and is generated by you. To ensure idempotency, this must be unique for each standing order request you create.\n\nNote that the standing order may not be created immediately if we need to review the request. In that case, the request may remain in a `PENDING` state for a while (possibly for a few hours).\n\nRequired scopes (any): standing-order:create. Requires request signing."
+  "/api/v2/payments/local/payment-order/{paymentOrderUid}":
+    get:
+      x-fern-sdk-group-name: payments
+      x-fern-sdk-method-name: getOrder
+      description: "\n\nRequired scopes (any): pay-local:read."
+  "/api/v2/payments/local/payment-order/{paymentOrderUid}/payments":
+    get:
+      x-fern-sdk-group-name: payments
+      x-fern-sdk-method-name: listOrderPayments
+      description: "Note that a payment associated with a payment order may be pending (`paymentStatusDetails.paymentStatus = PENDING`)  or rejected (`paymentStatusDetails.paymentStatus = REJECTED`).\n\nRequired scopes (any): pay-local:read."
+  "/api/v2/payments/local/account/{accountUid}/category/{categoryUid}/standing-orders/{paymentOrderUid}/upcoming-payments":
+    get:
+      x-fern-sdk-group-name: payments
+      x-fern-sdk-method-name: listUpcomingDates
+      description: "Categories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nIf you only want the next payment date, you can also get this from the `nextDate` returned by `GET /api/v2/payments/local/account/{accountUid}/category/{categoryUid}/standing-orders/{paymentOrderUid}`.\n\nIf `nextPaymentDates` is empty for a standing order, the standing order may be awaiting review, or may have been cancelled. Or it may have been a one-off standing order: in this case, `nextDate` will be null too.\n\nRequired scopes (any): standing-order:read."
+  "/api/v2/payments/local/account/{accountUid}/category/{categoryUid}":
+    put:
+      x-fern-sdk-group-name: payments
+      x-fern-sdk-method-name: create
+      x-fern-retries:
+        disabled: true
+      description: "Creates and sends an immediate payment within the UK under the Faster Payments Scheme or via SEPA for payments between Euro accounts.\n\nCategories are subdivisions of an account.\nThe default category holds the main balance and transactions. Savings goals and spending spaces are examples of other categories. You can use [`/api/v2/accounts`](#operations-tag-Accounts) to get the default category UID for an account.\n\nThe recipient of the payment must either be defined in the `paymentRecipient` field in the request body  or be an existing payee of the account holder (you can create a new payee using `/api/v2/payees`).For payments made using a Personal Access Token, the recipient must be an existing payee defined in the `destinationPayeeAccountUid` field.\n\n`externalIdentifier` is a unique identifier for the payment request, and is generated by you. To ensure idempotency, this must be unique for each payment request you create.\n\nNote that the payment may not take place immediately if we need to review the payment request. In that case, the payment may remain in a `PENDING` state for a while (possibly for a few hours).\n\nRequired scopes (any): pay-local:create, pay-local-once:create. Requires request signing."
+  "/api/v2/payees":
+    get:
+      x-fern-sdk-group-name: payees
+      x-fern-sdk-method-name: list
+      description: "\n\nRequired scopes (any): payee:read."
+    put:
+      x-fern-sdk-group-name: payees
+      x-fern-sdk-method-name: create
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): payee:create."
+  "/api/v2/payees/{payeeUid}/account":
+    put:
+      x-fern-sdk-group-name: payees
+      x-fern-sdk-method-name: addAccount
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): payee:create."
+  "/api/v2/payees/{payeeUid}":
+    get:
+      x-fern-sdk-group-name: payees
+      x-fern-sdk-method-name: get
+      description: "\n\nRequired scopes (any): payee:read."
+    put:
+      x-fern-sdk-group-name: payees
+      x-fern-sdk-method-name: update
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): payee:edit."
+    delete:
+      x-fern-sdk-group-name: payees
+      x-fern-sdk-method-name: delete
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): payee:delete."
+  "/api/v2/payees/{payeeUid}/account/{accountUid}":
+    delete:
+      x-fern-sdk-group-name: payees
+      x-fern-sdk-method-name: deleteAccount
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): payee:delete."
+  "/api/v2/payees/{payeeUid}/account/{accountUid}/scheduled-payments":
+    get:
+      x-fern-sdk-group-name: payees
+      x-fern-sdk-method-name: listScheduledPayments
+      description: "\n\nRequired scopes (any): scheduled-payment:read."
+  "/api/v2/payees/{payeeUid}/account/{accountUid}/payments":
+    get:
+      x-fern-sdk-group-name: payees
+      x-fern-sdk-method-name: listPayments
+      description: "\n\nRequired scopes (any): payee-transaction:read."
+  "/api/v2/payees/{payeeUid}/image":
+    get:
+      x-fern-sdk-group-name: payees
+      x-fern-sdk-method-name: downloadImage
+      description: "\n\nRequired scopes (any): payee-image:read."
+  "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}/add-money/{transferUid}":
+    put:
+      x-fern-sdk-group-name: savingsGoals
+      x-fern-sdk-method-name: addMoney
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): savings-goal-transfer:create."
+  "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}/recurring-transfer":
+    get:
+      x-fern-sdk-group-name: savingsGoals
+      x-fern-sdk-method-name: getRecurringTransfer
+      description: "\n\nRequired scopes (any): savings-goal-transfer:read."
+    put:
+      x-fern-sdk-group-name: savingsGoals
+      x-fern-sdk-method-name: setRecurringTransfer
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): savings-goal-transfer:create."
+    delete:
+      x-fern-sdk-group-name: savingsGoals
+      x-fern-sdk-method-name: deleteRecurringTransfer
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): savings-goal-transfer:delete."
+  "/api/v2/account/{accountUid}/savings-goals":
+    get:
+      x-fern-sdk-group-name: savingsGoals
+      x-fern-sdk-method-name: list
+      description: "\n\nRequired scopes (any): savings-goal:read."
+    put:
+      x-fern-sdk-group-name: savingsGoals
+      x-fern-sdk-method-name: create
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): savings-goal:create."
+  "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}":
+    get:
+      x-fern-sdk-group-name: savingsGoals
+      x-fern-sdk-method-name: get
+      description: "\n\nRequired scopes (any): savings-goal:read."
+    put:
+      x-fern-sdk-group-name: savingsGoals
+      x-fern-sdk-method-name: update
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): savings-goal:create."
+    delete:
+      x-fern-sdk-group-name: savingsGoals
+      x-fern-sdk-method-name: delete
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): savings-goal:delete."
+  "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}/photo":
+    get:
+      x-fern-sdk-group-name: savingsGoals
+      x-fern-sdk-method-name: downloadPhoto
+      description: "\n\nRequired scopes (any): savings-goal:read."
+  "/api/v2/account/{accountUid}/savings-goals/{savingsGoalUid}/withdraw-money/{transferUid}":
+    put:
+      x-fern-sdk-group-name: savingsGoals
+      x-fern-sdk-method-name: withdrawMoney
+      x-fern-retries:
+        disabled: true
+      description: "\n\nRequired scopes (any): savings-goal-transfer:create."
+  "/api/v2/settle-up/profile":
+    get:
+      x-fern-sdk-group-name: settleUp
+      x-fern-sdk-method-name: get
+      description: "\n\nRequired scopes (any): settle-up:read."
+  "/api/v2/account/{accountUid}/spaces/{spaceUid}/photo":
+    get:
+      x-fern-sdk-group-name: spaces
+      x-fern-sdk-method-name: downloadPhoto
+      description: "\n\nRequired scopes (any): space:read."
+  "/api/v2/account/{accountUid}/spaces":
+    get:
+      x-fern-sdk-group-name: spaces
+      x-fern-sdk-method-name: list
+      description: "\n\nRequired scopes (any): space:read."
+  "/api/v2/account/{accountUid}/spaces/spending/{spaceUid}":
+    get:
+      x-fern-sdk-group-name: spaces
+      x-fern-sdk-method-name: getSpendingSpace
+      description: "\n\nRequired scopes (any): space:read."

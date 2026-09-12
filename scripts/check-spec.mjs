@@ -1,0 +1,44 @@
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
+import YAML from "yaml";
+
+const bytes = await readFile("openapi/starling.json");
+const source = JSON.parse(await readFile("openapi/source.json", "utf8"));
+assert.equal(createHash("sha256").update(bytes).digest("hex"), source.sha256, "Upstream snapshot checksum changed");
+const spec = JSON.parse(bytes);
+const overrides = YAML.parse(await readFile("fern/overrides.yml", "utf8"));
+const verbs = new Set(["get", "post", "put", "delete", "patch", "head", "options"]);
+const names = new Set();
+const operations = [];
+for (const [path, item] of Object.entries(spec.paths)) {
+  for (const [method, operation] of Object.entries(item)) {
+    if (!verbs.has(method)) continue;
+    const override = overrides.paths?.[path]?.[method];
+    assert(override, `Add an override for ${method.toUpperCase()} ${path}`);
+    const group = override["x-fern-sdk-group-name"];
+    const name = override["x-fern-sdk-method-name"];
+    assert(group && name, `Missing SDK name for ${operation.operationId}`);
+    assert(!names.has(`${group}.${name}`), `Duplicate SDK name: ${group}.${name}`);
+    names.add(`${group}.${name}`);
+    if (!["get", "head", "options"].includes(method)) {
+      assert.equal(override["x-fern-retries"]?.disabled, true, `Disable retries for ${operation.operationId}`);
+    }
+    const security = operation.security ?? spec.security ?? [];
+    const signed = security.some((requirement) => "BearerAndSignature" in requirement);
+    const scopes = [...new Set(security.flatMap(Object.values).flat())];
+    operations.push({ method: method.toUpperCase(), path, operationId: operation.operationId, group, name, signed, scopes });
+  }
+}
+for (const [path, item] of Object.entries(overrides.paths ?? {})) {
+  for (const method of Object.keys(item).filter((key) => verbs.has(key))) {
+    assert(spec.paths[path]?.[method], `Remove stale override: ${method} ${path}`);
+  }
+}
+await mkdir("docs", { recursive: true });
+await writeFile("openapi/operations.json", JSON.stringify(operations, null, 2) + "\n");
+const snake = (value) => value.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+const lines = ["# Endpoint map", "", "Generated from the upstream specification and Fern overrides. Scope alternatives and signing requirements are preserved in `openapi/operations.json`.", "", "| HTTP | Path | TypeScript | Python | Signing |", "| --- | --- | --- | --- | --- |"];
+for (const op of operations) lines.push(`| ${op.method} | \`${op.path}\` | \`${op.group}.${op.name}\` | \`${snake(op.group)}.${snake(op.name)}\` | ${op.signed ? "Required" : "—"} |`);
+await writeFile("docs/naming-map.md", lines.join("\n") + "\n");
+console.log(`Checked ${operations.length} operations, including ${operations.filter((op) => op.signed).length} signed operations.`);

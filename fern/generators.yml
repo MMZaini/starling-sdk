@@ -1,0 +1,36 @@
+api:
+  specs:
+    - openapi: ../openapi/starling.json
+      overrides: ./overrides.yml
+  auth: AccessToken
+
+auth-schemes:
+  AccessToken:
+    scheme: bearer
+    token:
+      name: accessToken
+      env: STARLING_ACCESS_TOKEN
+
+groups:
+  typescript:
+    generators:
+      - name: fernapi/fern-typescript-sdk
+        version: 3.92.0
+        output:
+          location: local-file-system
+          path: ../sdks/typescript/src/generated
+        config:
+          namespaceExport: Starling
+          outputSourceFiles: true
+          allowCustomFetcher: true
+          inlinePathParameters: true
+  python:
+    generators:
+      - name: fernapi/fern-python-sdk
+        version: 5.30.0
+        output:
+          location: local-file-system
+          path: ../sdks/python/src/starling_bank/generated
+        config:
+          client_class_name: StarlingClient
+          package_name: starling_bank.generated
