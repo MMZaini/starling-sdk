@@ -36,6 +36,23 @@ Component tests cover SSR, masked details and exact money formatting. Browser
 tests check keyboard controls, accessibility and a narrow mobile layout. The
 components have been checked with React 18.3.1 and 19.3.0.
 
+## Release archives and documentation
+
+After installing the development dependencies for both SDKs and React:
+
+```sh
+npm run build:artifacts
+npm run check:artifacts
+```
+
+These checks install the actual npm tarballs into a temporary project and test
+ESM, CommonJS, public declarations and React rendering. They also compile and run
+the root and SDK README examples against mocked API responses. The Python wheel
+and source distribution are each installed into a clean virtual environment and
+checked with sync/async requests. Package contents, `py.typed` and archive
+checksums are verified. These checks need registry access for dependencies but
+make no requests to Starling.
+
 ## Sandbox checks
 
 Set `STARLING_SANDBOX_ACCESS_TOKEN` to a sandbox token with the required read

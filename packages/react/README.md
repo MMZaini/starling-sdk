@@ -46,4 +46,10 @@ spaces. The components work with SSR and have no dependency on the TypeScript SD
 Run the example from this directory with `npm ci && npm run dev`. It uses dummy
 data and demonstrates masked details, loading and error states.
 
+For an example that fetches from Starling on the server, build the TypeScript SDK,
+set `STARLING_ACCESS_TOKEN` to a sandbox token, and run `npm run example:server`.
+Open `http://127.0.0.1:3001`. The server renders masked account details without
+passing credentials to React. It binds only to localhost; add your application's
+session authorization before deploying a similar route.
+
 Community maintained; not an official Starling Bank package. [SDK repository](https://github.com/MMZaini/starling-sdk).

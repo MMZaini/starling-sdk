@@ -48,14 +48,70 @@ console.log("Installed npm artifacts passed ESM, CommonJS, public types and rend
   await writeFile(join(temporary, "runtime.mjs"), runtime);
   run(process.execPath, ["runtime.mjs"]);
 
+  // Compile the actual README examples against the installed packages.
+  const examples = async (path, language) => [...(await readFile(path, "utf8")).matchAll(/^```([^\r\n]+)\r?\n([\s\S]*?)^```/gm)]
+    .filter((match) => language.test(match[1])).map((match) => match[2]).join("\n");
+  const docsFixture = {
+    "/api/v2/accounts": { accounts: [{ accountUid: "00000000-0000-4000-8000-000000000001", defaultCategory: "00000000-0000-4000-8000-000000000002", currency: "GBP" }] },
+    "/api/v2/accounts/00000000-0000-4000-8000-000000000001/balance": { effectiveBalance: { currency: "GBP", minorUnits: 12345 } },
+    "/api/v2/feed/account/00000000-0000-4000-8000-000000000001/category/00000000-0000-4000-8000-000000000002/paginated-transactions": { feedItems: [{ feedItemUid: "00000000-0000-4000-8000-000000000003" }], links: {} },
+  };
+  await writeFile(join(temporary, "docs-fixture.json"), JSON.stringify(docsFixture));
+  await writeFile(join(temporary, "docs-bootstrap.mjs"), `import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+const fixture = JSON.parse(readFileSync(new URL("./docs-fixture.json", import.meta.url), "utf8"));
+process.env.STARLING_ACCESS_TOKEN = "documentation-fixture";
+globalThis.fetch = async (input, init) => {
+  const url = new URL(String(input));
+  assert.equal(url.origin, "https://api-sandbox.starlingbank.com");
+  assert.equal(init.method, "GET");
+  assert.equal(new Headers(init.headers).get("Authorization"), "Bearer documentation-fixture");
+  assert(fixture[url.pathname], "Unexpected documentation request: " + url.pathname);
+  return Response.json(fixture[url.pathname]);
+};\n`);
+  for (const [name, path] of [["root", "README.md"], ["typescript", "sdks/typescript/README.md"]]) {
+    const source = await examples(path, /^(ts|typescript)$/);
+    assert(source.includes("StarlingClient"), `No TypeScript quick start found in ${path}`);
+    await writeFile(join(temporary, `${name}.mts`), source);
+    run(process.execPath, [resolve("sdks/typescript/node_modules/typescript/bin/tsc"), "--strict", "--skipLibCheck", "false", "--target", "ES2022", "--module", "NodeNext", "--moduleResolution", "NodeNext", "--outDir", "docs-out", `${name}.mts`]);
+    run(process.execPath, ["--import", "./docs-bootstrap.mjs", `docs-out/${name}.mjs`]);
+  }
+
   const localPython = resolve(`.venv/${process.platform === "win32" ? "Scripts/python.exe" : "bin/python"}`);
   const python = process.env.BUILD_PYTHON ?? (existsSync(localPython) ? localPython : "python");
+  run(python, [resolve("scripts/check-python-archives.py"), resolve("artifacts/manifest.json")]);
   run(python, ["-m", "venv", join(temporary, "venv")]);
   const isolated = join(temporary, "venv", process.platform === "win32" ? "Scripts/python.exe" : "bin/python");
   const wheel = manifest.files.find((file) => file.path.endsWith(".whl"));
   run(isolated, ["-m", "pip", "install", "--disable-pip-version-check", resolve("artifacts", wheel.path)]);
   run(isolated, ["-m", "pip", "check"]);
   run(isolated, [resolve("scripts/check-wheel.py")], { env: { ...process.env, PYTHONPATH: "", PYTHONNOUSERSITE: "1" } });
+  const pythonBootstrap = `import json, os, httpx
+from pathlib import Path
+fixture = json.loads(Path("docs-fixture.json").read_text(encoding="utf-8"))
+os.environ["STARLING_ACCESS_TOKEN"] = "documentation-fixture"
+def send(self, request, **kwargs):
+    assert request.url.scheme == "https" and request.url.host == "api-sandbox.starlingbank.com"
+    assert request.method == "GET"
+    assert request.headers["Authorization"] == "Bearer documentation-fixture"
+    return httpx.Response(200, json=fixture[request.url.path], request=request)
+async def async_send(self, request, **kwargs):
+    return send(self, request, **kwargs)
+httpx.Client.send = send
+httpx.AsyncClient.send = async_send
+`;
+  for (const [name, path] of [["root", "README.md"], ["python", "sdks/python/README.md"]]) {
+    const source = await examples(path, /^python$/);
+    assert(source.includes("StarlingClient"), `No Python quick start found in ${path}`);
+    await writeFile(join(temporary, `${name}.py`), pythonBootstrap + "\n" + source);
+    run(isolated, [`${name}.py`], { env: { ...process.env, PYTHONPATH: "", PYTHONNOUSERSITE: "1" } });
+  }
+  const sdist = manifest.files.find((file) => file.registry === "pypi" && file.path.endsWith(".tar.gz"));
+  run(python, ["-m", "venv", join(temporary, "sdist-venv")]);
+  const sdistPython = join(temporary, "sdist-venv", process.platform === "win32" ? "Scripts/python.exe" : "bin/python");
+  run(sdistPython, ["-m", "pip", "install", "--disable-pip-version-check", resolve("artifacts", sdist.path)]);
+  run(sdistPython, ["-m", "pip", "check"]);
+  run(sdistPython, [resolve("scripts/check-wheel.py")], { env: { ...process.env, PYTHONPATH: "", PYTHONNOUSERSITE: "1" } });
 } finally {
   const target = resolve(temporary);
   assert(target.startsWith(resolve(tmpdir()) + sep) && target.split(sep).at(-1).startsWith("starling-package-check-"));

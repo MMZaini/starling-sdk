@@ -1,4 +1,4 @@
-"""Check the installed wheel outside the source checkout and editable environment."""
+"""Check an installed distribution outside the source checkout and editable environment."""
 
 import asyncio
 import importlib.metadata
@@ -27,4 +27,4 @@ async def check_async():
 
 
 asyncio.run(check_async())
-print("Installed wheel passed synchronous and asynchronous request checks.")
+print("Installed Python distribution passed synchronous and asynchronous request checks.")
