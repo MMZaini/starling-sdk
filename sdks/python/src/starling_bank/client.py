@@ -56,6 +56,9 @@ class _RequestGuard:
     def prepare(self, http, method, url, kwargs):
         if kwargs.get("timeout") is None:
             kwargs.pop("timeout", None)  # Preserve the supplied HTTP client's timeout.
+        if kwargs.get("headers"):
+            # Fern merges dictionaries case-sensitively; HTTP header overrides are not.
+            kwargs["headers"] = {key.lower(): value for key, value in kwargs["headers"].items()}
         if method.upper() not in ("GET", "HEAD", "OPTIONS"):
             _validate_amounts(kwargs.get("json"))
         request = http.build_request(method, url, **kwargs)
@@ -125,6 +128,11 @@ class StarlingClient(GeneratedClient):
         super().__init__(base_url=origin, environment=environment, access_token=token, headers=headers,
                          timeout=default_timeout, max_retries=max_retries, follow_redirects=False,
                          httpx_client=cast(httpx.Client, http), logging=logging)
+        self._base_url = origin
+
+    @property
+    def base_url(self) -> str:
+        return self._base_url
 
     def close(self) -> None:
         if self._owns_client:
@@ -154,6 +162,11 @@ class AsyncStarlingClient(GeneratedAsyncClient):
         super().__init__(base_url=origin, environment=environment, access_token=token, headers=headers,
                          timeout=default_timeout, max_retries=max_retries, follow_redirects=False,
                          httpx_client=cast(httpx.AsyncClient, http), logging=logging)
+        self._base_url = origin
+
+    @property
+    def base_url(self) -> str:
+        return self._base_url
 
     async def aclose(self) -> None:
         if self._owns_client:

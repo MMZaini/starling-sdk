@@ -72,7 +72,8 @@ async def test_every_operation_has_async_methods():
             assert callable(getattr(getattr(client, snake(op["group"])), snake(op["name"])))
 
 
-def test_upload_uses_raw_bytes_and_supplied_media_type():
+@pytest.mark.parametrize("header", ["content-type", "Content-Type", "CONTENT-TYPE"])
+def test_upload_uses_raw_bytes_and_supplied_media_type(header):
     data = bytes([0, 255, 10, 34])
 
     def handler(request):
@@ -82,5 +83,5 @@ def test_upload_uses_raw_bytes_and_supplied_media_type():
 
     with httpx.Client(transport=httpx.MockTransport(handler)) as http:
         client = StarlingClient(access_token="test-token", httpx_client=http)
-        result = client.feed.upload_attachment(account_uid="account", category_uid="category", feed_item_uid="feed-item", request=data, request_options={"additional_headers": {"content-type": "image/png"}})
+        result = client.feed.upload_attachment(account_uid="account", category_uid="category", feed_item_uid="feed-item", request=data, request_options={"additional_headers": {header: "image/png"}})
         assert result == "attachment-1"

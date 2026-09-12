@@ -5,12 +5,18 @@ import { readFile, writeFile, readdir } from "node:fs/promises";
 export async function postprocess(group) {
   if (group === "python") {
     const directory = "sdks/python/src/starling_bank/generated";
+    let optionalResponses = 0;
+    const unsafeEmpty = "if _response is None or not _response.text.strip():";
+    const safeEmpty = "if 200 <= _response.status_code < 300 and not _response.text.strip():";
     for (const entry of await readdir(directory, { recursive: true })) {
       if (!entry.endsWith(".py")) continue;
       const path = `${directory}/${entry}`;
-      const source = await readFile(path, "utf8");
+      let source = await readFile(path, "utf8");
+      if (source.includes(unsafeEmpty)) source = source.replaceAll(unsafeEmpty, safeEmpty);
+      optionalResponses += source.split(safeEmpty).length - 1;
       await writeFile(path, source.trimEnd() + "\n");
     }
+    if (optionalResponses !== 2) throw new Error("Review the Python optional-body status patch after changing Fern or response schemas");
     return;
   }
   const path = "sdks/typescript/src/generated/core/fetcher/makeRequest.ts";
@@ -81,5 +87,14 @@ export async function postprocess(group) {
         }
         if (args.abortSignal?.aborted) {`);
     await writeFile(fetcherPath, fetcher);
+  }
+  const feedPath = "sdks/typescript/src/generated/api/resources/feed/client/Client.ts";
+  let feed = await readFile(feedPath, "utf8");
+  const emptyBody = "data: _response.body as string | null";
+  const normalizedBody = "data: (_response.body ?? null) as string | null";
+  if (!feed.includes(normalizedBody)) {
+    if (feed.split(emptyBody).length !== 2) throw new Error("Review the TypeScript nullable upload response patch after changing Fern or response schemas");
+    feed = feed.replace(emptyBody, normalizedBody);
+    await writeFile(feedPath, feed);
   }
 }

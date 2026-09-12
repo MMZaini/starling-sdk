@@ -97,7 +97,7 @@ export class FeedClient {
     }
 
     /**
-     *
+     * Uploads raw attachment bytes. A 200 response contains the attachment UUID; an empty 202 response identifies it in the Location header. Use the raw response and getUploadedAttachmentUid (get_uploaded_attachment_uid in Python) to handle either form.
      *
      * Required scopes (any): attachment:write.
      *
@@ -116,7 +116,7 @@ export class FeedClient {
         categoryUid: string,
         feedItemUid: string,
         requestOptions?: FeedClient.RequestOptions,
-    ): core.HttpResponsePromise<string> {
+    ): core.HttpResponsePromise<string | null> {
         return core.HttpResponsePromise.fromPromise(
             this.__uploadAttachment(uploadable, accountUid, categoryUid, feedItemUid, requestOptions),
         );
@@ -128,7 +128,7 @@ export class FeedClient {
         categoryUid: string,
         feedItemUid: string,
         requestOptions?: FeedClient.RequestOptions,
-    ): Promise<core.WithRawResponse<string>> {
+    ): Promise<core.WithRawResponse<string | null>> {
         const _binaryUploadRequest = await core.file.toBinaryUploadRequest(uploadable);
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -158,7 +158,7 @@ export class FeedClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as string, rawResponse: _response.rawResponse };
+            return { data: (_response.body ?? null) as string | null, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {

@@ -25,6 +25,7 @@ function validateAmounts(value: unknown): void {
 
 /** Generated resources with request signing, redirect protection and amount checks. */
 export class StarlingClient extends GeneratedClient {
+  readonly baseUrl: string;
   constructor(options: StarlingClientOptions = {}) {
     const environment = options.environment ?? StarlingEnvironment.Sandbox;
     if (!Object.values(StarlingEnvironment).includes(environment)) throw new TypeError("Invalid Starling environment");
@@ -62,5 +63,6 @@ export class StarlingClient extends GeneratedClient {
     super({ accessToken: options.accessToken, environment, baseUrl: origin.origin,
       headers: options.headers, timeoutInSeconds: options.timeoutInSeconds, maxRetries: options.maxRetries,
       logging: options.logging, fetch: guardedFetch, fetcher: guardedFetcher });
+    this.baseUrl = origin.origin;
   }
 }

@@ -105,9 +105,9 @@ class RawFeedClient:
         feed_item_uid: str,
         request: typing.Union[bytes, typing.Iterator[bytes], typing.AsyncIterator[bytes]],
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> HttpResponse[str]:
+    ) -> HttpResponse[typing.Optional[str]]:
         """
-
+        Uploads raw attachment bytes. A 200 response contains the attachment UUID; an empty 202 response identifies it in the Location header. Use the raw response and getUploadedAttachmentUid (get_uploaded_attachment_uid in Python) to handle either form.
 
         Required scopes (any): attachment:write.
 
@@ -129,7 +129,7 @@ class RawFeedClient:
 
         Returns
         -------
-        HttpResponse[str]
+        HttpResponse[typing.Optional[str]]
             Successful operation
         """
         _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
@@ -146,11 +146,13 @@ class RawFeedClient:
             omit=OMIT,
         )
         try:
+            if 200 <= _response.status_code < 300 and not _response.text.strip():
+                return HttpResponse(response=_response, data=None)
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    str,
+                    typing.Optional[str],
                     parse_obj_as(
-                        type_=str,  # type: ignore
+                        type_=typing.Optional[str],  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -1058,9 +1060,9 @@ class AsyncRawFeedClient:
         feed_item_uid: str,
         request: typing.Union[bytes, typing.Iterator[bytes], typing.AsyncIterator[bytes]],
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> AsyncHttpResponse[str]:
+    ) -> AsyncHttpResponse[typing.Optional[str]]:
         """
-
+        Uploads raw attachment bytes. A 200 response contains the attachment UUID; an empty 202 response identifies it in the Location header. Use the raw response and getUploadedAttachmentUid (get_uploaded_attachment_uid in Python) to handle either form.
 
         Required scopes (any): attachment:write.
 
@@ -1082,7 +1084,7 @@ class AsyncRawFeedClient:
 
         Returns
         -------
-        AsyncHttpResponse[str]
+        AsyncHttpResponse[typing.Optional[str]]
             Successful operation
         """
         _request_options_with_retries_disabled: typing.Optional[RequestOptions] = (
@@ -1099,11 +1101,13 @@ class AsyncRawFeedClient:
             omit=OMIT,
         )
         try:
+            if 200 <= _response.status_code < 300 and not _response.text.strip():
+                return AsyncHttpResponse(response=_response, data=None)
             if 200 <= _response.status_code < 300:
                 _data = typing.cast(
-                    str,
+                    typing.Optional[str],
                     parse_obj_as(
-                        type_=str,  # type: ignore
+                        type_=typing.Optional[str],  # type: ignore
                         object_=_response.json(),
                     ),
                 )

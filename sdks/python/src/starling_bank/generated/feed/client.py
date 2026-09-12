@@ -104,9 +104,9 @@ class FeedClient:
         feed_item_uid: str,
         request: typing.Union[bytes, typing.Iterator[bytes], typing.AsyncIterator[bytes]],
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> str:
+    ) -> typing.Optional[str]:
         """
-
+        Uploads raw attachment bytes. A 200 response contains the attachment UUID; an empty 202 response identifies it in the Location header. Use the raw response and getUploadedAttachmentUid (get_uploaded_attachment_uid in Python) to handle either form.
 
         Required scopes (any): attachment:write.
 
@@ -128,7 +128,7 @@ class FeedClient:
 
         Returns
         -------
-        str
+        typing.Optional[str]
             Successful operation
         """
         _response = self._raw_client.upload_attachment(
@@ -1006,9 +1006,9 @@ class AsyncFeedClient:
         feed_item_uid: str,
         request: typing.Union[bytes, typing.Iterator[bytes], typing.AsyncIterator[bytes]],
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> str:
+    ) -> typing.Optional[str]:
         """
-
+        Uploads raw attachment bytes. A 200 response contains the attachment UUID; an empty 202 response identifies it in the Location header. Use the raw response and getUploadedAttachmentUid (get_uploaded_attachment_uid in Python) to handle either form.
 
         Required scopes (any): attachment:write.
 
@@ -1030,7 +1030,7 @@ class AsyncFeedClient:
 
         Returns
         -------
-        str
+        typing.Optional[str]
             Successful operation
         """
         _response = await self._raw_client.upload_attachment(

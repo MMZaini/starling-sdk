@@ -200,6 +200,21 @@ paths:
     post:
       x-fern-sdk-group-name: feed
       x-fern-sdk-method-name: uploadAttachment
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+                nullable: true
+        '202':
+          description: Accepted; the response body is empty and Location identifies the attachment. Observed in the Starling sandbox.
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Relative URL of the uploaded attachment.
       requestBody:
         content:
           application/octet-stream:
@@ -212,7 +227,7 @@ paths:
               format: binary
       x-fern-retries:
         disabled: true
-      description: "\n\nRequired scopes (any): attachment:write."
+      description: "Uploads raw attachment bytes. A 200 response contains the attachment UUID; an empty 202 response identifies it in the Location header. Use the raw response and getUploadedAttachmentUid (get_uploaded_attachment_uid in Python) to handle either form.\n\nRequired scopes (any): attachment:write."
   "/api/v2/feed/account/{accountUid}/category/{categoryUid}/{feedItemUid}/spending-category":
     put:
       x-fern-sdk-group-name: feed

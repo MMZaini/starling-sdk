@@ -49,6 +49,7 @@
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",
+    "check:scripts": "tsc --noEmit -p tsconfig.scripts.json",
     "test": "node --import tsx --test tests/*.test.ts",
     "prepublishOnly": "npm run typecheck && npm run build"
   },
