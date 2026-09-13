@@ -749,6 +749,24 @@ function App() {
   const [active, setActive] = useState(location.hash.slice(1) || "overview");
   const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
+    // React can mount after the browser's first attempt to restore a fragment.
+    // Resolve it once the page has loaded so direct links and reloads agree.
+    let frame = 0;
+    const restoreAnchor = () => {
+      const id = window.location.hash.slice(1);
+      if (!sections.some((section) => section.id === id)) return;
+      frame = requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "instant" });
+      });
+    };
+    if (document.readyState === "complete") restoreAnchor();
+    else window.addEventListener("load", restoreAnchor, { once: true });
+    return () => {
+      window.removeEventListener("load", restoreAnchor);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+  useEffect(() => {
     let frame = 0;
     const update = () => {
       cancelAnimationFrame(frame);
