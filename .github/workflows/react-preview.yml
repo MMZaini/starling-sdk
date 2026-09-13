@@ -1,0 +1,68 @@
+name: React preview
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/react/**'
+      - '.github/workflows/react-preview.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: react-preview-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: packages/react/package-lock.json
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - run: npm --prefix packages/react ci
+      - run: npm --prefix packages/react test
+      - name: Build the preview for its public URL
+        env:
+          SHOWCASE_BASE_PATH: ${{ steps.pages.outputs.base_path }}/
+        run: npm --prefix packages/react run example:build -- --base "$SHOWCASE_BASE_PATH"
+      - name: Install Chromium
+        working-directory: packages/react
+        run: npx playwright install --with-deps chromium
+      - name: Test the production preview
+        env:
+          SHOWCASE_PREVIEW: 'true'
+          SHOWCASE_BASE_PATH: ${{ steps.pages.outputs.base_path }}/
+        run: npm --prefix packages/react run test:browser
+      - name: Upload only the built preview
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: packages/react/example-dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy the preview
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

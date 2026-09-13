@@ -42,6 +42,19 @@ Component tests cover SSR, masked details and exact money formatting. Browser
 tests check keyboard controls, accessibility and a narrow mobile layout. The
 components have been checked with React 18.3.1 and 19.3.0.
 
+The [hosted React preview](https://mmzaini.github.io/starling-sdk/) is built from
+`packages/react/example/`. To test the production site at the same subpath as
+GitHub Pages, run from `packages/react`:
+
+```sh
+npm run example:build -- --base /starling-sdk/
+SHOWCASE_PREVIEW=true SHOWCASE_BASE_PATH=/starling-sdk/ npm run test:browser
+```
+
+In PowerShell, set `$env:SHOWCASE_PREVIEW = "true"` and
+`$env:SHOWCASE_BASE_PATH = "/starling-sdk/"` before running `npm run test:browser`.
+The Pages workflow runs these checks before uploading only `example-dist/`.
+
 ## Release archives and documentation
 
 After installing the development dependencies for both SDKs and React:

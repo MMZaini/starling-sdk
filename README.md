@@ -15,6 +15,16 @@ Community maintained and not affiliated with Starling Bank. Both SDKs default to
 
 [Release notes and downloads](https://github.com/MMZaini/starling-sdk/releases).
 
+## React component preview
+
+[Open the interactive preview](https://mmzaini.github.io/starling-sdk/) to try
+`AccountCard`, `Balance`, `AccountDetails`, and `formatMoney`. It includes live prop
+controls, state examples, and copyable code, using fictional data without API credentials.
+
+The showcase lives in [`packages/react/example`](packages/react/example) and is
+deployed separately from the SDK packages. See the [React README](packages/react/README.md#component-preview)
+for local development and production preview commands.
+
 ## Quick start
 
 Create a sandbox account and access token in the [developer portal](https://developer.starlingbank.com/).

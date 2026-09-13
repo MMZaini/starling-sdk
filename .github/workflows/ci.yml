@@ -83,6 +83,7 @@ jobs:
       - run: npm --prefix packages/react run typecheck
       - run: npm --prefix packages/react test
       - run: npm --prefix packages/react run build
+      - run: npm --prefix packages/react run example:build
       - if: matrix.react == '19.3.0'
         working-directory: packages/react
         run: npx playwright install --with-deps chromium
