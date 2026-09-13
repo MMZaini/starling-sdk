@@ -9,7 +9,7 @@ generated from Starling's official OpenAPI specification with [Fern](https://git
 | --- | --- | --- |
 | [TypeScript / JavaScript](https://www.npmjs.com/package/@mmzaini/starling-sdk) · Node 22+ | `npm install @mmzaini/starling-sdk` | [TypeScript SDK](sdks/typescript/README.md) |
 | [Python](https://pypi.org/project/starling-bank-sdk/) 3.11+ | `pip install starling-bank-sdk` | [Python SDK](sdks/python/README.md) |
-| [Optional React components](https://www.npmjs.com/package/@mmzaini/starling-react) · React 18/19 | `npm install @mmzaini/starling-react` | [React package](packages/react/README.md) |
+| [Optional React components](https://www.npmjs.com/package/@mmzaini/starling-react) · React 18/19 | `npm install @mmzaini/starling-react` | [React package](packages/react/README.md) · [Live preview](https://mmzaini.github.io/starling-sdk/) |
 
 Community maintained and not affiliated with Starling Bank. Both SDKs default to the sandbox.
 
