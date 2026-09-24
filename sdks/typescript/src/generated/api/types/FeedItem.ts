@@ -101,6 +101,7 @@ export namespace FeedItem {
         StarlingPayStripe: "STARLING_PAY_STRIPE",
         OnUsPayMe: "ON_US_PAY_ME",
         LoanPrincipalPayment: "LOAN_PRINCIPAL_PAYMENT",
+        LoanRefund: "LOAN_REFUND",
         LoanRepayment: "LOAN_REPAYMENT",
         LoanOverpayment: "LOAN_OVERPAYMENT",
         LoanLatePayment: "LOAN_LATE_PAYMENT",
@@ -116,6 +117,7 @@ export namespace FeedItem {
         OverdraftFee: "OVERDRAFT_FEE",
         WithheldTax: "WITHHELD_TAX",
         ErrorsAndOmissions: "ERRORS_AND_OMISSIONS",
+        MarketingReferralsReward: "MARKETING_REFERRALS_REWARD",
         InterestV2Payment: "INTEREST_V2_PAYMENT",
     } as const;
     export type Source = (typeof Source)[keyof typeof Source];

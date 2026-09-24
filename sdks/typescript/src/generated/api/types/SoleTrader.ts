@@ -12,10 +12,10 @@ export interface SoleTrader {
     businessCategory?: SoleTrader.BusinessCategory | undefined;
     /** Business subcategory */
     businessSubCategory?: SoleTrader.BusinessSubCategory | undefined;
-    /** Business category description */
-    businessCategoryDescriptions?: Starling.CategoryDescription[] | undefined;
     /** Business subcategory description */
     businessSubCategoryDescriptions?: Starling.CategoryDescription[] | undefined;
+    /** Business category description */
+    businessCategoryDescriptions?: Starling.CategoryDescription[] | undefined;
 }
 
 export namespace SoleTrader {
