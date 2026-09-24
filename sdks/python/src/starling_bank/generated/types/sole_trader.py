@@ -43,15 +43,6 @@ class SoleTrader(UniversalBaseModel):
     Business subcategory
     """
 
-    business_category_descriptions: typing_extensions.Annotated[
-        typing.Optional[typing.List[CategoryDescription]],
-        FieldMetadata(alias="businessCategoryDescriptions"),
-        pydantic.Field(alias="businessCategoryDescriptions", description="Business category description"),
-    ] = None
-    """
-    Business category description
-    """
-
     business_sub_category_descriptions: typing_extensions.Annotated[
         typing.Optional[typing.List[CategoryDescription]],
         FieldMetadata(alias="businessSubCategoryDescriptions"),
@@ -59,6 +50,15 @@ class SoleTrader(UniversalBaseModel):
     ] = None
     """
     Business subcategory description
+    """
+
+    business_category_descriptions: typing_extensions.Annotated[
+        typing.Optional[typing.List[CategoryDescription]],
+        FieldMetadata(alias="businessCategoryDescriptions"),
+        pydantic.Field(alias="businessCategoryDescriptions", description="Business category description"),
+    ] = None
+    """
+    Business category description
     """
 
     if IS_PYDANTIC_V2:
