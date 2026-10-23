@@ -2,17 +2,4 @@
 
 import typing
 
-SpendingSpaceSpendingSpaceType = typing.Union[
-    typing.Literal[
-        "SHOPPING",
-        "CHILDCARE",
-        "HELPING_OUT",
-        "YOUNG_PERSON",
-        "EXPENSE",
-        "SPARE_CARD",
-        "CHILDCARE_V2",
-        "SHOPPING_V2",
-        "SPARE",
-    ],
-    typing.Any,
-]
+SpendingSpaceSpendingSpaceType = typing.Union[typing.Literal["EXPENSE", "U16", "CONNECTED"], typing.Any]
