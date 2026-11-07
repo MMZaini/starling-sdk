@@ -21,15 +21,9 @@ export interface SpendingSpace {
 export namespace SpendingSpace {
     /** Spending Space Type. From 2026-10-19, SHOPPING, CHILDCARE and HELPING_OUT are replaced by CONNECTED, and YOUNG_PERSON is replaced by U16. SPARE_CARD, CHILDCARE_V2 and SHOPPING_V2 are removed on the same date (not currently returned). EXPENSE is unaffected. */
     export const SpendingSpaceType = {
-        Shopping: "SHOPPING",
-        Childcare: "CHILDCARE",
-        HelpingOut: "HELPING_OUT",
-        YoungPerson: "YOUNG_PERSON",
         Expense: "EXPENSE",
-        SpareCard: "SPARE_CARD",
-        ChildcareV2: "CHILDCARE_V2",
-        ShoppingV2: "SHOPPING_V2",
-        Spare: "SPARE",
+        U16: "U16",
+        Connected: "CONNECTED",
     } as const;
     export type SpendingSpaceType = (typeof SpendingSpaceType)[keyof typeof SpendingSpaceType];
     /** The state of the spending space */
